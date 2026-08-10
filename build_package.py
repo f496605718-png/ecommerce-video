@@ -7,7 +7,7 @@
   - tests/**                      测试套件（78 用例安全锚点）
   - 01-07 方法论文档 md + README.md / README_EN.md / LICENSE / CONTRIBUTING.md
   - INSTALL.md / CONFIG.md / ASSETS.md + docs/**（PROVIDERS.md / ARCHITECTURE.md 等）
-  - pyproject.toml / requirements.txt / install.py / build_package.py
+  - pyproject.toml / build_package.py
   - .env.example / .gitignore
   - data/schema.sql               数据库建表脚本（`ecommerce-video init` 依赖；.db 产物不打包）
   - examples/**（若存在）
@@ -22,7 +22,7 @@ zip 内目录结构（标准包布局，顶层目录保留包名 ecommerce-video
   ecommerce-video/
   ├── src/ecommerce_video/...      （含 knowledge/、prompt_gen_template.md）
   ├── tests/...
-  ├── pyproject.toml / requirements.txt / install.py
+  ├── pyproject.toml / build_package.py
   ├── README.md / README_EN.md / LICENSE / CONTRIBUTING.md
   ├── 01-*.md ... 07-*.md / INSTALL.md / CONFIG.md / ASSETS.md
   ├── docs/PROVIDERS.md / docs/ARCHITECTURE.md
@@ -43,7 +43,7 @@ ZIP_ROOT = "ecommerce-video"   # zip 内顶层目录名
 
 # 根级文档/配置白名单（保持 zip 内干净，不含调试残留）
 ROOT_FILES = [
-    "pyproject.toml", "requirements.txt", "install.py", "build_package.py",
+    "pyproject.toml", "build_package.py",
     "README.md", "README_EN.md", "LICENSE", "CONTRIBUTING.md",
     "INSTALL.md", "CONFIG.md", "ASSETS.md", ".env.example", ".gitignore",
     "demo_storyboard.json", "demo_jobs.json", "demo_jobs_full.json",

@@ -161,3 +161,4 @@ Full architecture diagrams (layered overview / A0→G flow skeleton / 4-level re
 
 - License: MIT (see `LICENSE`)
 - Contributing: see `CONTRIBUTING.md` (dev environment / test discipline / code style / PR flow / knowledge-base change rules)
+- **Knowledge base contributions welcome**: 14 categories are being expanded (clothing has 30 entries; some categories 6-17). Add entries, improve scene-light combos, or fix errors via PR — the KB is JSON + schema-validated, just run `ecommerce-video kbcheck` (35/35) after changes.
