@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "场景光线对照表 Schema",
+  "description": "校验 knowledge/*-scene-light.json（面料/美妆/食品/3C/家居等品类 × 场景 × 光线对照表）。顶层含公共头 schema_version/updated/note + groups 分组索引 + items 条目数组。items[].id 必填且全文件唯一（唯一性由 validate_kb.py 跨字段检查）；items[].group 必须存在于顶层 groups 的某个 key（由 validate_kb.py 检查）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "groups", "items"],
+  "properties": {
+    "schema_version": { "type": "string", "description": "结构版本号，如 1.0" },
+    "updated": { "type": "string", "description": "最后更新日期 YYYY-MM-DD" },
+    "note": { "type": "string", "description": "文件用途说明" },
+    "groups": {
+      "type": "object",
+      "description": "分类索引：key 为分组名，value 为该分组下的条目 id 数组。items[].group 必须能在此找到对应 key"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "description": "条目数组，每个条目一个场景光线方案",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "group", "properties", "scenes", "light", "prompt_zh", "avoid", "negative", "tags"],
+        "properties": {
+          "id": { "type": "string", "description": "条目唯一 id（如 satin/lipstick），全文件内不得重复" },
+          "name": { "type": "string", "description": "中文名" },
+          "alt": { "type": "string", "description": "别名/别称，可空字符串" },
+          "group": { "type": "string", "description": "所属分组名，必须为顶层 groups 的某个 key" },
+          "properties": { "type": "string", "description": "材质/产品特性描述" },
+          "scenes": { "type": "array", "items": { "type": "string" }, "description": "适配场景列表（中文字符串）" },
+          "light": { "type": "string", "description": "光线方案描述" },
+          "prompt_zh": { "type": "string", "description": "中文提示词写法" },
+          "avoid": { "type": "string", "description": "避坑说明" },
+          "negative": { "type": "array", "items": { "type": "string" }, "description": "该条目专属负面词" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "标签" }
+        }
+      }
+    }
+  }
+}

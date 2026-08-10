@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-07",
+  "note": "箱包×场景×光线对照。包型/五金/logo/缝线一致性是命门。",
+  "groups": {
+    "通勤": ["handbag", "briefcase"],
+    "休闲": ["crossbody", "backpack", "totebag"],
+    "旅行": ["luggage", "weekender"]
+  },
+  "items": [
+    {"id": "handbag", "name": "手提包", "group": "通勤", "properties": "真皮/仿皮，包型挺括，五金锁扣", "scenes": ["办公室", "都市街头", "咖啡店"], "light": "柔光+轮廓光，质感", "prompt_zh": "真皮手提包五金质感高级，包型挺括，模特手提行走都市街头柔光", "avoid": "包型塌陷；五金错乱；logo错误", "negative": ["包型变形", "五金错乱", "logo错误"], "tags": ["手提包", "通勤", "质感"]},
+    {"id": "briefcase", "name": "公文包/商务包", "group": "通勤", "properties": "结构硬挺，商务感", "scenes": ["金融街", "会议室", "写字楼"], "light": "硬朗光+冷调环境", "prompt_zh": "公文包结构硬挺，商务质感，金融街蓝调时刻冷调氛围", "avoid": "包型变形；拉链错乱", "negative": ["包型变形"], "tags": ["商务", "硬挺", "通勤"]},
+    {"id": "crossbody", "name": "斜挎包", "group": "休闲", "properties": "轻便，链条/肩带，街头感", "scenes": ["街头", "音乐节", "潮牌街区"], "light": "自然光+霓虹可选", "prompt_zh": "斜挎包轻便随性，链条肩带反光，街头行走自然光潮感", "avoid": "链条变形；肩带长度失真", "negative": ["链条变形"], "tags": ["斜挎", "街头", "潮"]},
+    {"id": "backpack", "name": "双肩包", "group": "休闲", "properties": "容量，背负系统，面料", "scenes": ["校园", "通勤地铁", "户外"], "light": "自然光，日常感", "prompt_zh": "双肩包容纳丰富，背负舒适，校园晨光日常氛围", "avoid": "包型塌；拉链错乱", "negative": ["包型塌陷"], "tags": ["双肩", "日常", "容量"]},
+    {"id": "totebag", "name": "托特包", "group": "休闲", "properties": "大容量，软塌/挺括，帆布/皮", "scenes": ["逛街", "周末街头", "咖啡店"], "light": "柔光，松弛感", "prompt_zh": "托特包大容量随性，帆布质感自然，周末街角松弛柔光", "avoid": "包型失真；帆布纹理糊", "negative": ["纹理模糊"], "tags": ["托特", "随性", "大容量"]},
+    {"id": "luggage", "name": "旅行箱", "group": "旅行", "properties": "PC/铝合金，轮子，拉杆，尺寸", "scenes": ["机场", "高铁站", "旅行街景"], "light": "自然光+冷调环境", "prompt_zh": "旅行箱PC材质光泽，拉杆顺滑，轮子滚动平稳，机场自然光旅行氛围", "avoid": "箱体变形；轮子错位；拉杆变形", "negative": ["箱体变形", "轮子错位"], "tags": ["旅行箱", "机场", "旅行"]},
+    {"id": "weekender", "name": "旅行袋/登机包", "group": "旅行", "properties": "软包，大容量，便携", "scenes": ["公路旅行", "度假酒店", "车站"], "light": "自然光+暖光可选", "prompt_zh": "旅行袋软质大容量，提携轻松，公路旅行自然光随性氛围", "avoid": "包型塌；拉链错乱", "negative": ["包型塌陷"], "tags": ["旅行", "便携", "随性"]}
+  ]
+}

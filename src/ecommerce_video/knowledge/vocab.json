@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-07",
+  "note": "通用词库（中文提示词用）。分组：灯光/运镜/镜头景别/画质/负面词。检索：按 group 取用，配合 fabric-scene-light.json 的面料词。",
+  "lighting": [
+    {"id": "softbox", "zh": "柔光箱", "use": "主光，柔和过渡，商业感", "type": "主光"},
+    {"id": "window", "zh": "窗光", "use": "自然柔光，日常/居家氛围", "type": "主光"},
+    {"id": "overcast", "zh": "阴天散射光", "use": "均匀无影，质感呈现", "type": "主光"},
+    {"id": "hardlight", "zh": "硬光", "use": "轮廓利落，街头/硬挺面料", "type": "主光"},
+    {"id": "rembrandt", "zh": "伦勃朗光", "use": "三角光区，人像高级感", "type": "主光"},
+    {"id": "butterfly", "zh": "蝴蝶光", "use": "鼻下蝶影，时尚硬照", "type": "主光"},
+    {"id": "rim", "zh": "轮廓光/发丝光", "use": "勾边缘，突出轮廓", "type": "辅助"},
+    {"id": "backlight", "zh": "逆光", "use": "剪影/通透感/氛围", "type": "辅助"},
+    {"id": "sidelight", "zh": "侧光", "use": "纹理立体感", "type": "主光"},
+    {"id": "toplight", "zh": "顶光", "use": "舞台感/戏剧感", "type": "辅助"},
+    {"id": "fill", "zh": "补光", "use": "提亮阴影，控制光比", "type": "辅助"},
+    {"id": "goldenhour", "zh": "黄金时刻", "use": "日出日落暖光，电影感", "type": "氛围"},
+    {"id": "bluehour", "zh": "蓝调时刻", "use": "冷色氛围，高级感", "type": "氛围"},
+    {"id": "candle", "zh": "烛光/火光", "use": "低色温暖光，私密感", "type": "氛围"},
+    {"id": "neon", "zh": "霓虹灯", "use": "彩色光污染，赛博/夜店", "type": "氛围"}
+  ],
+  "camera_movement": [
+    {"id": "orbit", "zh": "环绕", "use": "360度展示，动感"},
+    {"id": "tracking", "zh": "跟拍", "use": "行走/运动跟随，真实感"},
+    {"id": "whip_pan", "zh": "甩镜", "use": "快速转场，节奏感"},
+    {"id": "overhead", "zh": "俯拍", "use": "俯视全局，平面感"},
+    {"id": "slow_motion", "zh": "慢动作/升格", "use": "强调动态细节，电影感"},
+    {"id": "dolly_in", "zh": "推近", "use": "聚焦情绪/细节"},
+    {"id": "dolly_out", "zh": "拉远", "use": "展示环境/收尾"},
+    {"id": "crab", "zh": "横移", "use": "平行移动，展示线条"},
+    {"id": "crane", "zh": "升降", "use": "大场面调度"},
+    {"id": "handheld", "zh": "手持", "use": "晃动真实感，UGC/纪实"},
+    {"id": "static", "zh": "固定机位", "use": "克制，极简/棚拍"}
+  ],
+  "lens_shot": [
+    {"id": "extreme_closeup", "zh": "大特写/微距", "use": "材质纹理/工艺细节"},
+    {"id": "closeup", "zh": "特写", "use": "情绪/细节/卖点"},
+    {"id": "medium_closeup", "zh": "近景", "use": "胸像，情绪+服装"},
+    {"id": "medium", "zh": "中景", "use": "膝上，动作展示"},
+    {"id": "full", "zh": "全景", "use": "全身，版型展示"},
+    {"id": "wide", "zh": "远景", "use": "环境+人物，大场面"},
+    {"id": "over_shoulder", "zh": "过肩", "use": "代入感/对话"},
+    {"id": "high_angle", "zh": "俯视角度", "use": "人物显小/环境感"},
+    {"id": "low_angle", "zh": "仰视角度", "use": "人物显高/气势"},
+    {"id": "macro85", "zh": "85mm以上长焦", "use": "压缩空间，人像/面料特写"}
+  ],
+  "quality": [
+    {"id": "cinematic", "zh": "电影感画面", "use": "收尾通用"},
+    {"id": "4k", "zh": "4K画质", "use": "收尾通用"},
+    {"id": "grain", "zh": "胶片颗粒", "use": "复古/电影质感"},
+    {"id": "dof", "zh": "浅景深", "use": "虚化背景，突出主体"},
+    {"id": "hdr", "zh": "高动态范围", "use": "明暗细节丰富"},
+    {"id": "color_grading", "zh": "统一调色", "use": "跨镜头一致"}
+  ],
+  "negative_general": [
+    "服装变形", "图案错乱", "颜色偏移", "材质纹理模糊", "多余肢体", "手指变形", "面部变形", "形变扭曲", "画面闪烁", "水印", "画面文字", "过饱和", "塑料感光泽", "平淡光线", "材质僵硬", "动作静止", "闪烁频闪"
+  ]
+}

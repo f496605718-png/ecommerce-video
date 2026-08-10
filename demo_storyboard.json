@@ -1,0 +1,13 @@
+{
+  "project": "demo",
+  "sku": "knit_sweater",
+  "category": "clothing",
+  "sku_desc": "酒红色麻花针织衫",
+  "material": "针织毛线",
+  "model_desc": "25岁气质温柔的女性",
+  "type": "复古胶片风",
+  "shots": [
+    {"shot_no": 1, "scene": "旧街道咖啡店", "light": "暖黄灯光", "lens": "中景", "move": "固定", "action": "倚窗而立", "motion": "针织纹理在暖光中显质感", "duration": 5},
+    {"shot_no": 2, "scene": "秋日街头", "light": "黄昏暖光", "lens": "全景", "move": "跟拍", "action": "自然行走", "motion": "针织衫随步伐自然摆动", "duration": 5}
+  ]
+}

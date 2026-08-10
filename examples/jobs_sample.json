@@ -1,0 +1,22 @@
+[
+  {
+    "project": "sample",
+    "sku": "cotton_tee",
+    "shot_no": 1,
+    "category": "clothing",
+    "prompt": "22岁清爽阳光男生，米白色重磅纯棉T恤，与参考图完全一致。城市天台场景，自然日光均匀洒落，中景，固定机位。模特面向镜头站立，纯棉面料在自然光下呈现细腻肌理，宽松版型利落挺括。干净明亮色调，清爽真实质感。",
+    "negative_prompt": "形变扭曲,多余肢体,手指变形,水印,画面文字,皮肤光滑,塑料感,过度磨皮,画面模糊,穿帮",
+    "duration_sec": 5,
+    "version_count": 1
+  },
+  {
+    "project": "sample",
+    "sku": "cotton_tee",
+    "shot_no": 2,
+    "category": "clothing",
+    "prompt": "22岁清爽阳光男生，米白色重磅纯棉T恤，与参考图完全一致。街角人行道场景，午后阳光铺洒，全景，跟拍。模特大步行走，T恤下摆随步伐自然摆动，纯棉面料呈现自然褶皱肌理。干净明亮色调，街头活力氛围。",
+    "negative_prompt": "形变扭曲,多余肢体,手指变形,水印,画面文字,皮肤光滑,塑料感,过度磨皮,画面模糊,穿帮",
+    "duration_sec": 5,
+    "version_count": 1
+  }
+]

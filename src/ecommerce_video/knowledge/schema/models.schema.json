@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "视频生成模型注册表 Schema",
+  "description": "校验 knowledge/models.json。default_model(string，且必须存在于 models[].id，由 validate_kb.py 跨字段检查)；models 是 array，每项含 id/name/capabilities（能力参数，多数可 null——未确认项按 null/保守值处理）；capability_impact 是顶层 object（能力→流程影响映射）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "default_model", "models"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "default_model": { "type": "string", "description": "默认推荐模型 id" },
+    "models": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "capabilities"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "provider": { "type": "string" },
+          "access": { "type": "string", "description": "接入方式" },
+          "capabilities": {
+            "type": "object",
+            "required": ["ref_images", "duration_min", "duration_max", "resolutions", "image_to_video", "chinese_prompt", "multi_ref_supported"],
+            "description": "能力参数：未确认项允许 null（自定义接入模型）",
+            "properties": {
+              "ref_images": { "type": ["integer", "null"], "description": "参考图上限" },
+              "ref_videos": { "type": ["integer", "null"] },
+              "ref_audio": { "type": ["integer", "null"] },
+              "duration_min": { "type": ["integer", "null"], "description": "最短时长（秒）" },
+              "duration_max": { "type": ["integer", "null"], "description": "最长时长（秒）" },
+              "resolutions": { "type": "array", "items": { "type": "string" }, "description": "支持分辨率（可空数组）" },
+              "image_to_video": { "type": ["boolean", "null"] },
+              "text_to_video": { "type": ["boolean", "null"] },
+              "first_frame_anchor": { "type": ["boolean", "null"] },
+              "last_frame_anchor": { "type": ["boolean", "null"] },
+              "motion_brush": { "type": ["boolean", "null"] },
+              "keyframes": { "type": ["boolean", "null"] },
+              "timestamp_editing": { "type": ["boolean", "null"] },
+              "subject_consistency": { "type": ["boolean", "null"] },
+              "native_audio_video": { "type": ["boolean", "null"] },
+              "consistency_strength": { "type": ["string", "null"] },
+              "chinese_prompt": { "type": ["string", "null"], "description": "中文提示词支持度（原生优/一般/未知等）" },
+              "multi_ref_supported": { "type": ["boolean", "null"], "description": "是否支持多参考图" },
+              "need_composite": { "type": ["boolean", "string", "null"], "description": "是否需要 S 阶段首帧合成" }
+            }
+          },
+          "notes": { "type": "string" },
+          "verified": { "type": "boolean", "description": "是否已实测验证" }
+        }
+      }
+    },
+    "capability_impact": {
+      "type": "object",
+      "description": "能力→流程影响映射（key 为能力名，value 为影响说明）"
+    },
+    "default_prompt": { "type": "string", "description": "客户未指定模型时的默认话术" },
+    "llm_models": { "type": "object", "description": "LLM 模型注册（key 为模型 id）" },
+    "image_models": { "type": "object", "description": "图像模型注册（key 为模型 id）" }
+  }
+}

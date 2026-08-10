@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-07",
+  "note": "品类合规红线。compliance_check 供质检阶段调用；high_risk 品类建议不接。",
+  "general_rules": [
+    {"id": "G1", "rule": "禁止虚假/引人误解宣传", "video": "画面暗示、配音、贴片都算"},
+    {"id": "G2", "rule": "禁止绝对化用语", "video": "最/第一/顶级/100%"},
+    {"id": "G3", "rule": "数据宣称必须有来源", "video": "销量/评分/检测数据需客户提供依据"},
+    {"id": "G4", "rule": "禁止贬低竞品", "video": "对比镜头不得出现某品牌不如我"},
+    {"id": "G5", "rule": "禁止编造资质/检测/专利/奖项", "video": "不生成无依据的证书画面"},
+    {"id": "G6", "rule": "价格/促销信息真实", "video": "贴片价签、折扣数字需客户确认"}
+  ],
+  "category_rules": [
+    {
+      "category": "服装",
+      "red_lines": ["材质成分真实（纯棉≠混纺）", "功能宣称需证据（防晒/防泼水）"],
+      "video_tips": "面料特写别暗示虚假材质；显瘦/遮肉属主观描述可用，别量化",
+      "high_risk": false
+    },
+    {
+      "category": "美妆",
+      "red_lines": ["不得宣称疗效", "祛斑/美白等需特证", "不得医疗化暗示"],
+      "video_tips": "妆效对比别夸张到换脸级别；敏感肌/致痘等词慎用",
+      "high_risk": false
+    },
+    {
+      "category": "普通食品",
+      "red_lines": ["不得疾病预防/治疗/保健暗示", "不写降血糖/抗癌等"],
+      "video_tips": "食欲镜头可以夸张，功效宣称一个字都不能有",
+      "high_risk": false
+    },
+    {
+      "category": "保健食品",
+      "red_lines": ["只能基于批准文号+客户提供资料表达"],
+      "video_tips": "无批准文号信息不接",
+      "high_risk": true
+    },
+    {
+      "category": "母婴",
+      "red_lines": ["不得夸大", "不得制造焦虑"],
+      "video_tips": "场景安全优先；医生/专家形象慎用",
+      "high_risk": false
+    },
+    {
+      "category": "3C数码",
+      "red_lines": ["参数真实不虚标", "效果演示不夸大"],
+      "video_tips": "功能演示镜头需与真实能力匹配（防水≠可潜水）",
+      "high_risk": false
+    },
+    {
+      "category": "家居",
+      "red_lines": ["材质/尺寸真实", "环保宣称需证据"],
+      "video_tips": "场景美化可，数据宣称需依据",
+      "high_risk": false
+    },
+    {
+      "category": "运动器材",
+      "red_lines": ["避免医疗术语/治疗动词/保证性效果"],
+      "video_tips": "效果对比镜头慎用（包瘦等禁止）",
+      "high_risk": false
+    },
+    {
+      "category": "医疗药品器械",
+      "red_lines": ["资质红线"],
+      "video_tips": "建议不接视频单",
+      "high_risk": true
+    }
+  ],
+  "video_specific_checks": [
+    {"id": "V1", "check": "配音/贴片文案无绝对化用语、无无依据功效"},
+    {"id": "V2", "check": "对比镜头不贬低竞品、不夸大效果"},
+    {"id": "V3", "check": "出现的数据/资质/证书均有客户提供依据"},
+    {"id": "V4", "check": "按品类红线表核对本品类红线"}
+  ]
+}

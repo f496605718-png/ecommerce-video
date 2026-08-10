@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "知识库检索索引 Schema",
+  "description": "校验 knowledge/index.json。files 是 array，每项含 file/content/item_count/groups/tags/id_prefix/typical_query；retrieval_paths 是 array（每项 step/query/target）；quick_index 是 object。files[].file 对应的文件必须真实存在（含通配模式如 profiles/*.profile.json，由 validate_kb.py 跨文件检查）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "files"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["file", "content", "item_count", "groups", "tags", "id_prefix", "typical_query"],
+        "properties": {
+          "file": { "type": "string", "description": "相对 knowledge/ 的文件路径，支持通配（如 profiles/*.profile.json）" },
+          "content": { "type": "string" },
+          "item_count": { "type": "integer", "description": "条目数（注意：可能与实际不同步，仅作参考）" },
+          "groups": { "type": "array", "items": { "type": "string" } },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "id_prefix": { "type": "string", "description": "条目 id 前缀/示例说明" },
+          "typical_query": { "type": "string", "description": "典型检索问法" }
+        }
+      }
+    },
+    "retrieval_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step", "query", "target"],
+        "properties": {
+          "step": { "type": "string" },
+          "query": { "type": "string" },
+          "target": { "type": "string" }
+        }
+      }
+    },
+    "quick_index": { "type": "object", "description": "快捷索引（key 为检索维度）" }
+  }
+}

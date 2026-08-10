@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "品类 Profile Schema",
+  "description": "校验 knowledge/profiles/*.profile.json（14 品类 × 11 模块行业拍摄知识体系）。顶层含公共头 schema_version/updated/note + category（品类 id）+ modules（必须含 11 个模块 key）。M5 必含 action_rules（动作规则），动作数组的 key 因品类而异（model_actions/product_actions/food_actions/actions），不强制具体名字；M10 必含 level1_general/level2_category/level3_subcategory 三级负面词；M11 必含 sequences。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "category", "modules"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "category": { "type": "string", "description": "品类 id（如 clothing/beauty/food），应与文件名前缀一致" },
+    "modules": {
+      "type": "object",
+      "description": "11 个模块，key 固定为 M1-M11",
+      "required": [
+        "M1_category_profile",
+        "M2_shooting_style_system",
+        "M3_lens_language",
+        "M4_lighting_system",
+        "M5_motion_direction",
+        "M6_scene_library",
+        "M7_styling_spec",
+        "M8_industry_pitfalls",
+        "M9_qa_standards",
+        "M10_negative_prompts",
+        "M11_type_adaptation"
+      ],
+      "properties": {
+        "M1_category_profile": {
+          "type": "object",
+          "required": ["name"],
+          "description": "品类画像",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M2_shooting_style_system": {
+          "type": "object",
+          "required": ["name"],
+          "description": "拍摄风格体系",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M3_lens_language": {
+          "type": "object",
+          "required": ["name"],
+          "description": "镜头语言库",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M4_lighting_system": {
+          "type": "object",
+          "required": ["name"],
+          "description": "光影体系",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M5_motion_direction": {
+          "type": "object",
+          "required": ["name", "action_rules"],
+          "description": "动态表演库。动作数组 key 因品类而异（model_actions/product_actions/food_actions/actions），此处只校验稳定的 action_rules",
+          "properties": {
+            "name": { "type": "string" },
+            "action_rules": { "type": "array", "items": { "type": "string" }, "description": "动作规则（字符串数组，全品类稳定）" },
+            "model_actions": { "type": "array", "items": { "type": "object" }, "description": "模特动作库（服装/美妆/箱包/配饰类用）" },
+            "product_actions": { "type": "array", "items": { "type": "object" }, "description": "产品动作库（3C/珠宝/汽车类用）" },
+            "food_actions": { "type": "array", "items": { "type": "object" }, "description": "食品动作库（食品类用）" },
+            "actions": { "type": "array", "items": { "type": "object" }, "description": "通用动作库（其他品类用）" }
+          }
+        },
+        "M6_scene_library": {
+          "type": "object",
+          "required": ["name"],
+          "description": "场景库",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M7_styling_spec": {
+          "type": "object",
+          "required": ["name"],
+          "description": "造型规范",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M8_industry_pitfalls": {
+          "type": "object",
+          "required": ["name"],
+          "description": "行业避坑库",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M9_qa_standards": {
+          "type": "object",
+          "required": ["name"],
+          "description": "质检标准",
+          "properties": { "name": { "type": "string" } }
+        },
+        "M10_negative_prompts": {
+          "type": "object",
+          "required": ["name", "level1_general", "level2_category", "level3_subcategory"],
+          "description": "负面词体系（通用+品类+子品类三级）",
+          "properties": {
+            "name": { "type": "string" },
+            "level1_general": { "type": "array", "items": { "type": "object" }, "description": "L1 通用负面词（每项含 负面词/原因）" },
+            "level2_category": { "type": "array", "items": { "type": "object" }, "description": "L2 品类负面词（每项含 负面词/原因）" },
+            "level3_subcategory": { "type": "object", "description": "L3 子品类负面词：key 为子品类名，value 为负面词字符串数组" },
+            "usage": { "type": "string", "description": "三级拼装规则说明" }
+          }
+        },
+        "M11_type_adaptation": {
+          "type": "object",
+          "required": ["name", "sequences"],
+          "description": "类型适配（12 类型 × 镜头序列）",
+          "properties": {
+            "name": { "type": "string" },
+            "sequences": { "type": "array", "items": { "type": "object" }, "description": "每项含 type/icon/shot_sequence/rhythm/style_dna_words" }
+          }
+        }
+      }
+    }
+  }
+}

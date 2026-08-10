@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "通用词库 Schema",
+  "description": "校验 knowledge/vocab.json。lighting/camera_movement/lens_shot/quality 是 array（每项含 id/zh/use，lighting 额外可有 type 主光/辅助/氛围）；negative_general 是 string 数组。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "lighting", "camera_movement", "lens_shot", "quality", "negative_general"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "lighting": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "zh", "use"],
+        "properties": {
+          "id": { "type": "string" },
+          "zh": { "type": "string" },
+          "use": { "type": "string" },
+          "type": { "type": "string", "description": "灯光角色：主光/辅助/氛围（可选）" }
+        }
+      }
+    },
+    "camera_movement": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "zh", "use"],
+        "properties": {
+          "id": { "type": "string" },
+          "zh": { "type": "string" },
+          "use": { "type": "string" }
+        }
+      }
+    },
+    "lens_shot": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "zh", "use"],
+        "properties": {
+          "id": { "type": "string" },
+          "zh": { "type": "string" },
+          "use": { "type": "string" }
+        }
+      }
+    },
+    "quality": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "zh", "use"],
+        "properties": {
+          "id": { "type": "string" },
+          "zh": { "type": "string" },
+          "use": { "type": "string" }
+        }
+      }
+    },
+    "negative_general": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "通用负面词（纯字符串数组）"
+    }
+  }
+}

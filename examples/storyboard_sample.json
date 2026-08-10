@@ -1,0 +1,13 @@
+{
+  "project": "sample",
+  "sku": "cotton_tee",
+  "category": "clothing",
+  "sku_desc": "米白色重磅纯棉T恤",
+  "material": "纯棉",
+  "model_desc": "22岁清爽阳光的男生",
+  "type": "街头纪实街拍",
+  "shots": [
+    {"shot_no": 1, "scene": "城市天台", "light": "自然日光", "lens": "中景", "move": "固定", "action": "面向镜头站立", "motion": "纯棉面料在自然光下呈现细腻肌理", "duration": 5},
+    {"shot_no": 2, "scene": "街角人行道", "light": "午后阳光", "lens": "全景", "move": "跟拍", "action": "大步行走", "motion": "T恤下摆随步伐自然摆动", "duration": 5}
+  ]
+}

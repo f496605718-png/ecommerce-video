@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "合规红线 Schema",
+  "description": "校验 knowledge/compliance.json。含 general_rules（通用红线数组）/category_rules（品类红线数组）/video_specific_checks（视频专项检查数组）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "general_rules", "category_rules", "video_specific_checks"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "general_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "rule", "video"],
+        "properties": {
+          "id": { "type": "string", "description": "如 G1-G6" },
+          "rule": { "type": "string" },
+          "video": { "type": "string", "description": "视频场景下的具体含义" }
+        }
+      }
+    },
+    "category_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "red_lines", "video_tips", "high_risk"],
+        "properties": {
+          "category": { "type": "string" },
+          "red_lines": { "type": "array", "items": { "type": "string" } },
+          "video_tips": { "type": "string" },
+          "high_risk": { "type": "boolean", "description": "高风险品类建议不接" }
+        }
+      }
+    },
+    "video_specific_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "check"],
+        "properties": {
+          "id": { "type": "string", "description": "如 V1-V4" },
+          "check": { "type": "string" }
+        }
+      }
+    }
+  }
+}

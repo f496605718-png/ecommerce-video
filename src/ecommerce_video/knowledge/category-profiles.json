@@ -1,0 +1,478 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-07",
+  "note": "品类知识包索引：每个品类一个 profile（信息卡字段集/一致性锚点/产品动态词库/质检项/负面词/合规引用）。新品类进来 = 新增一个 profile，通用骨架(03/04)不动。服装为完整标准模板，其余品类核心字段已铺，场景光线细节待建。",
+  "profiles": {
+    "clothing": {
+      "name": "服装",
+      "info_card_fields": [
+        {"key": "silhouette", "label": "版型", "example": "修身/直筒/A字/oversize/收腰", "required": true},
+        {"key": "fabric", "label": "面料", "example": "丝绸/棉/牛仔/羊毛", "required": true},
+        {"key": "pattern", "label": "图案/印花", "example": "无/碎花/条纹", "required": false},
+        {"key": "hardware", "label": "五金细节", "example": "拉链/纽扣/链条/logo样式", "required": false},
+        {"key": "fit_details", "label": "领型/袖长/裙长", "example": "V领/无袖/及膝", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["版型比例", "印花纹样", "色值", "五金样式", "面料质感"],
+        "ref_source": "参考图：白底图(外形) + 细节特写图(面料/印花/五金)"
+      },
+      "material_inference": {
+        "three_factors": ["光泽(哑/亮/珠光)", "垂坠(挺括/柔软/流动)", "纹理(织纹/绒感/光滑)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库（L2/L3 提示词用）",
+        "items": ["垂坠流动", "飘动/摆动", "光泽滑动", "褶皱自然", "裙摆甩动", "衣袂翻飞"],
+        "example_prompt": "丝绸面料，垂坠如液体般流动，光泽随动作滑动"
+      },
+      "scene_light_tendency": "按面料查 01 对照表（缎面→大理石+柔光箱轮廓光；牛仔→砖墙+硬光；羊绒→晨雾咖啡灯）",
+      "qa_checks": [
+        "版型：肩宽/腰线/裙长比例一致",
+        "印花/图案：纹样不错位、不扭曲、不消失",
+        "色值：与商品图色值一致",
+        "五金：拉链/纽扣数量、样式、logo 正确",
+        "面料质感：纹理清晰，光泽符合面料特性",
+        "动态自然：垂坠/飘动符合面料特性"
+      ],
+      "negative_prompt": "服装变形、图案错乱、颜色偏移、面料纹理模糊、多余肢体、手指变形、面部变形、形变扭曲、画面闪烁、水印、画面文字、过饱和、塑料感光泽、面料僵硬、动作静止",
+      "compliance_ref": "服装"
+    },
+    "beauty": {
+      "name": "美妆/护肤",
+      "info_card_fields": [
+        {"key": "shade", "label": "色号", "example": "正红#C7000B/裸粉", "required": true},
+        {"key": "texture", "label": "质地", "example": "丝绒哑光/水润/粉质/膏体", "required": true},
+        {"key": "skin_type", "label": "适用肤质", "example": "全肤质/敏感肌慎用", "required": false},
+        {"key": "packaging", "label": "包装", "example": "管装/瓶装/包装主色", "required": true},
+        {"key": "effect_claim", "label": "功效卖点", "example": "持妆/保湿（需合规核）", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["色号值（口红色差是头号翻车点）", "包装瓶形/logo", "质地（膏/液/粉）", "标签文字"],
+        "ref_source": "参考图：白底图 + 色号特写图（试色图）+ 使用图（上脸/上手）"
+      },
+      "material_inference": {
+        "three_factors": ["质地(膏/液/粉/霜)", "光泽(哑光/水光/珠光)", "延展性(推开质感)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["推开延展", "成膜", "水润光泽", "粉质细腻", "膏体顺滑", "唇部上色"],
+        "example_prompt": "口红膏体顺滑推开，正红色在唇上均匀显色，丝绒哑光质地"
+      },
+      "scene_light_tendency": "查 knowledge/beauty-scene-light.json（15组：彩妆/护肤/香氛），按产品id取场景光线与提示词；通用灯光/运镜词查 vocab.json",
+      "qa_checks": [
+        "色号：与试色图一致（取色器比对）",
+        "包装：瓶形/logo/标签文字正确",
+        "质地：膏体/液体/粉质表现正确",
+        "妆效：与确认的哑光/水光一致，不夸大"
+      ],
+      "negative_prompt": "色号偏移、包装变形、logo错乱、标签文字乱码、膏体融化、质地错误、塑料感、水印、画面文字",
+      "compliance_ref": "美妆"
+    },
+    "food": {
+      "name": "食品",
+      "info_card_fields": [
+        {"key": "taste", "label": "口味", "example": "香辣/原味/芝士", "required": true},
+        {"key": "spec", "label": "规格", "example": "500g/6只装/500ml", "required": true},
+        {"key": "form", "label": "形态", "example": "固体/液体/酱状/粉状", "required": true},
+        {"key": "origin", "label": "产地/工艺", "example": "云南/古法/0添加", "required": false},
+        {"key": "packaging", "label": "包装", "example": "袋装/罐装/盒装", "required": true}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["包装设计/品牌字样", "食物颜色（颜色失真是头号翻车点）", "形态（颗粒/块状/酱体）", "份量感"],
+        "ref_source": "参考图：白底图 + 成品/摆盘图 + 包装特写"
+      },
+      "material_inference": {
+        "three_factors": ["色泽(食欲感)", "形态(脆/软/黏/流心)", "质地(酥脆/绵密/拉丝)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["热气升腾", "拉丝", "爆汁/流心", "酥脆掉渣", "酱汁缓缓倒下", "融化流动"],
+        "example_prompt": "刚出炉的面包热气升腾，掰开拉丝绵密，金黄酥脆"
+      },
+      "scene_light_tendency": "查 knowledge/food-scene-light.json（17组：热食/甜点饮品/零食生鲜/酒饮），按品类id取；食欲感镜头可夸张，功效宣称零容忍",
+      "qa_checks": [
+        "颜色：食物颜色真实（不发灰/不过饱和）",
+        "形态：颗粒/块状/酱体一致",
+        "包装：品牌字样/设计正确",
+        "食欲感：热气/光泽自然，不假"
+      ],
+      "negative_prompt": "食物颜色失真、形态塌陷、包装变形、文字乱码、塑料感、过饱和、水印、画面文字、无食欲感",
+      "compliance_ref": "普通食品"
+    },
+    "digital3c": {
+      "name": "3C数码",
+      "info_card_fields": [
+        {"key": "params", "label": "核心参数", "example": "屏幕尺寸/续航/芯片", "required": true},
+        {"key": "shell_material", "label": "外壳材质", "example": "铝合金/玻璃/塑料", "required": true},
+        {"key": "interfaces", "label": "接口", "example": "Type-C/HDMI/无线", "required": false},
+        {"key": "screen", "label": "屏幕", "example": "尺寸/边框/刷新率", "required": false},
+        {"key": "brand_mark", "label": "logo/标识", "example": "背面logo位置样式", "required": true}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["外壳形态", "logo/标识", "按键布局", "屏幕内容（无乱码）", "接口位置"],
+        "ref_source": "参考图：白底图 + 多角度图 + 细节特写(logo/接口) + 使用图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(金属/塑料/玻璃/皮革)", "表面处理(磨砂/镜面/拉丝)", "结构(开合/滑轨)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["开合", "旋转展示", "亮屏动画", "接口插拔", "滑动", "散热气流"],
+        "example_prompt": "笔记本开合流畅，屏幕亮起，金属外壳在灯光下呈现磨砂质感"
+      },
+      "scene_light_tendency": "查 knowledge/digital3c-scene-light.json（13组：随身/桌面/影音/拍摄），按品类id取；参数演示不夸大",
+      "qa_checks": [
+        "logo/标识：位置样式正确",
+        "按键/接口：布局一致",
+        "屏幕：无乱码、无错字",
+        "外壳：材质质感正确（金属≠塑料）",
+        "参数演示：效果不夸大"
+      ],
+      "negative_prompt": "logo错乱、屏幕乱码、按键变形、接口错位、外壳材质错误、塑料感、水印、画面文字、参数虚假",
+      "compliance_ref": "3C数码"
+    },
+    "home": {
+      "name": "家居",
+      "info_card_fields": [
+        {"key": "material", "label": "材质", "example": "实木/布艺/陶瓷/金属", "required": true},
+        {"key": "dimension", "label": "尺寸", "example": "长宽高/容量", "required": true},
+        {"key": "style", "label": "风格", "example": "北欧/中式/工业风", "required": true},
+        {"key": "pattern", "label": "花纹", "example": "素色/条纹/图案", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["造型比例", "材质质感", "花纹图案", "尺寸比例（空间感）"],
+        "ref_source": "参考图：白底图 + 细节特写(材质) + 场景图(空间)"
+      },
+      "material_inference": {
+        "three_factors": ["材质(木/布/瓷/金属)", "表面(哑光/亮光/编织)", "结构(几何/流线)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["光影变化", "开合使用", "摆放场景", "材质反射"],
+        "example_prompt": "木质家具在午后窗光下呈现温润质感，光影随时间流动"
+      },
+      "scene_light_tendency": "查 knowledge/home-scene-light.json（14组：客厅/卧室/餐厨/收纳/卫浴），按品类id取；家是最大场景舞台",
+      "qa_checks": [
+        "造型/比例一致",
+        "材质质感正确",
+        "花纹图案不错位",
+        "空间尺寸比例合理"
+      ],
+      "negative_prompt": "造型变形、材质错误、花纹错乱、比例失调、塑料感、水印、画面文字",
+      "compliance_ref": "家居"
+    },
+    "shoes": {
+      "name": "鞋靴",
+      "info_card_fields": [
+        {"key": "type", "label": "鞋型", "example": "运动鞋/皮鞋/靴子/凉鞋/老爹鞋", "required": true},
+        {"key": "upper_material", "label": "鞋面材质", "example": "头层皮/网面/帆布/麂皮", "required": true},
+        {"key": "sole", "label": "鞋底/科技", "example": "气垫/橡胶/增高/缓震", "required": false},
+        {"key": "colorway", "label": "配色", "example": "黑白/撞色/纯色", "required": true},
+        {"key": "details", "label": "细节", "example": "logo/鞋带/缝线/五金", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["鞋型轮廓", "logo/标识", "配色分布", "鞋底结构"],
+        "ref_source": "参考图：白底图(多角度) + 细节特写(logo/鞋底) + 上脚图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(皮/网/帆布)", "表面(光泽/哑光/麂皮绒)", "结构(鞋型/鞋底厚度)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["行走上脚", "鞋底弹性", "鞋带动态", "转动展示"],
+        "example_prompt": "运动鞋上脚行走，鞋底缓震回弹，鞋面网面透气质感，街头跟拍"
+      },
+      "scene_light_tendency": "查 knowledge/shoes-scene-light.json（12组：运动/休闲/正装/靴/凉拖）",
+      "qa_checks": [
+        "鞋型轮廓一致",
+        "logo/标识位置正确",
+        "配色分布与商品一致",
+        "鞋底/鞋带结构正确",
+        "材质质感正确（皮≠帆布）"
+      ],
+      "negative_prompt": "鞋型变形、logo错乱、配色偏移、鞋底结构错乱、材质错误、缝线错乱、水印、画面文字",
+      "compliance_ref": "服装"
+    },
+    "bags": {
+      "name": "箱包",
+      "info_card_fields": [
+        {"key": "type", "label": "包型", "example": "手提包/双肩包/斜挎/旅行箱", "required": true},
+        {"key": "material", "label": "材质", "example": "牛皮/PU/帆布/尼龙/PC", "required": true},
+        {"key": "hardware", "label": "五金", "example": "拉链/扣件/logo牌", "required": true},
+        {"key": "capacity", "label": "容量/尺寸", "example": "13L/20寸登机箱", "required": false},
+        {"key": "color", "label": "主色", "example": "黑/焦糖/奶油白", "required": true}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["包型轮廓", "五金样式", "logo", "缝线走线"],
+        "ref_source": "参考图：白底图(多角度) + 五金/logo特写 + 背携图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(皮/帆布/尼龙)", "表面(纹理/压纹/光面)", "结构(软塌/挺括)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["开合拉链", "背携行走", "五金反光", "转动展示"],
+        "example_prompt": "真皮手提包五金质感高级，拉开拉链内里清晰，模特背携行走都市街头"
+      },
+      "scene_light_tendency": "查 knowledge/bags-scene-light.json（10组：通勤/休闲/旅行/潮牌）",
+      "qa_checks": [
+        "包型轮廓一致",
+        "五金数量/样式正确",
+        "logo正确",
+        "缝线走线不乱",
+        "材质质感正确"
+      ],
+      "negative_prompt": "包型变形、五金错乱、logo错误、缝线乱、材质错误、塑料感、水印、画面文字",
+      "compliance_ref": "服装"
+    },
+    "accessories": {
+      "name": "配饰（帽/围巾/腰带/眼镜）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "帽子/围巾/腰带/眼镜/丝巾", "required": true},
+        {"key": "material", "label": "材质", "example": "羊毛/真丝/金属/板材", "required": true},
+        {"key": "pattern", "label": "花纹", "example": "格纹/纯色/logo", "required": false},
+        {"key": "brand_logo", "label": "logo", "example": "金属标/织标", "required": true},
+        {"key": "size_fit", "label": "尺寸/佩戴", "example": "均码/头围/腰围", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["造型轮廓", "花纹", "logo", "五金/搭扣"],
+        "ref_source": "参考图：白底图 + 细节特写(花纹/logo) + 佩戴图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(毛/丝/金属/板材)", "表面(织纹/光泽/磨砂)", "结构(软/硬/可折叠)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["佩戴动作", "丝巾飘动", "转动展示", "围系动作"],
+        "example_prompt": "羊毛围巾柔软垂坠，佩戴后随动作自然摆动，冬日街角暖光"
+      },
+      "scene_light_tendency": "查 knowledge/accessories-scene-light.json（10组：帽/巾/带/镜）",
+      "qa_checks": [
+        "造型轮廓一致",
+        "花纹不错位",
+        "logo/搭扣正确",
+        "材质质感正确"
+      ],
+      "negative_prompt": "造型变形、花纹错乱、logo错误、材质错误、水印、画面文字",
+      "compliance_ref": "服装"
+    },
+    "personalcare": {
+      "name": "个护（洗护/口腔/剃须）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "洗发水/沐浴露/牙膏/剃须刀", "required": true},
+        {"key": "packaging", "label": "包装", "example": "瓶/管/罐，主色", "required": true},
+        {"key": "function_claim", "label": "功效卖点", "example": "控油/去屑/保湿（需合规核）", "required": true},
+        {"key": "spec", "label": "规格", "example": "500ml/120g", "required": false},
+        {"key": "scent", "label": "香型", "example": "薄荷/柑橘/无香", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["包装瓶形/标签", "logo", "液体质地", "标签文字"],
+        "ref_source": "参考图：白底图 + 包装特写 + 使用场景图"
+      },
+      "material_inference": {
+        "three_factors": ["质地(液/膏/泡沫)", "泡沫感", "包装材质"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["泡沫绵密", "挤出手感", "冲洗水流", "剃须过程"],
+        "example_prompt": "洗发水揉出绵密泡沫，水流冲洗发丝顺滑，浴室水汽灯光"
+      },
+      "scene_light_tendency": "查 knowledge/personalcare-scene-light.json（10组：洗护/口腔/剃须）",
+      "qa_checks": [
+        "包装瓶形/标签正确",
+        "logo/文字无乱码",
+        "质地正确（泡沫/液体）",
+        "功效宣称合规（去屑/美白需资质）"
+      ],
+      "negative_prompt": "包装变形、文字乱码、质地错误、泡沫失真、水印、画面文字、功效夸大",
+      "compliance_ref": "美妆"
+    },
+    "baby": {
+      "name": "母婴（奶粉/纸尿裤/玩具/童装）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "奶粉/纸尿裤/玩具/推车/童装", "required": true},
+        {"key": "age_range", "label": "适用月龄/年龄", "example": "0-6月/3岁+", "required": true},
+        {"key": "packaging", "label": "包装", "example": "罐/袋/盒", "required": true},
+        {"key": "safety", "label": "安全卖点", "example": "食品级/防呛/无BPA（需资质）", "required": true},
+        {"key": "material", "label": "材质", "example": "纯棉/食品级硅胶/ABS", "required": true}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["包装/图案", "产品形态", "logo/文字", "安全细节"],
+        "ref_source": "参考图：白底图 + 包装特写 + 使用场景图（宝宝形象慎重）"
+      },
+      "material_inference": {
+        "three_factors": ["材质(棉/硅胶/塑料)", "表面(柔软/光滑)", "形态(结构)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["宝宝使用动作", "开合", "玩耍动态", "推车推行"],
+        "example_prompt": "宝宝坐在推车里好奇张望，推车推行平稳，公园晨光温馨氛围"
+      },
+      "scene_light_tendency": "查 knowledge/baby-scene-light.json（10组：奶粉/纸尿裤/玩具/推车/童装）",
+      "qa_checks": [
+        "包装/图案正确",
+        "logo/文字无乱码",
+        "产品形态正确",
+        "宝宝形象无变形",
+        "安全宣称需资质（夸大禁止）"
+      ],
+      "negative_prompt": "宝宝面部变形、包装变形、文字乱码、形态错误、危险画面、水印、画面文字、功效夸大",
+      "compliance_ref": "母婴"
+    },
+    "sports": {
+      "name": "运动户外（健身/露营/骑行）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "健身器材/露营装备/骑行/球类", "required": true},
+        {"key": "material", "label": "材质", "example": "铝合金/碳纤维/帆布", "required": true},
+        {"key": "function", "label": "功能卖点", "example": "折叠/防水/承重", "required": true},
+        {"key": "spec", "label": "规格/尺寸", "example": "承重100kg/展开尺寸", "required": true},
+        {"key": "scene_use", "label": "使用场景", "example": "健身房/露营/通勤骑行", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["产品结构", "logo/标识", "材质质感", "折叠/展开形态"],
+        "ref_source": "参考图：白底图(多角度) + 结构特写 + 使用场景图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(金属/碳纤/布)", "表面(磨砂/阳极/涂装)", "结构(折叠/固定)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["折叠展开", "使用动态", "承重演示", "骑行/投掷"],
+        "example_prompt": "折叠帐篷快速展开，铝合金支架稳固，山间营地晨光户外氛围"
+      },
+      "scene_light_tendency": "查 knowledge/sports-scene-light.json（12组：健身/露营/骑行/球类）",
+      "qa_checks": [
+        "产品结构正确",
+        "折叠/展开形态一致",
+        "logo/标识正确",
+        "材质质感正确",
+        "功能演示不夸大（避免医疗/治疗暗示）"
+      ],
+      "negative_prompt": "结构变形、折叠形态错误、logo错乱、材质错误、水印、画面文字、医疗暗示",
+      "compliance_ref": "运动器材"
+    },
+    "pet": {
+      "name": "宠物用品（粮/砂/玩具/窝）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "猫粮/狗粮/猫砂/玩具/窝", "required": true},
+        {"key": "packaging", "label": "包装", "example": "袋/罐/盒", "required": true},
+        {"key": "flavor", "label": "口味/配方", "example": "鸡肉/三文鱼/无谷", "required": true},
+        {"key": "target", "label": "适用宠物", "example": "成猫/幼犬/全阶段", "required": true},
+        {"key": "material", "label": "材质", "example": "棉/硅胶/尼龙", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["包装/图案", "logo/文字", "产品形态", "宠物形象"],
+        "ref_source": "参考图：白底图 + 包装特写 + 宠物使用图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(棉/硅胶/塑料)", "表面(柔软/耐磨)", "形态"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["宠物进食", "玩耍动态", "猫砂结团", "宠物入窝"],
+        "example_prompt": "猫咪好奇拨弄玩具，猫粮颗粒饱满，居家暖光温馨氛围"
+      },
+      "scene_light_tendency": "查 knowledge/pet-scene-light.json（10组：粮/砂/玩具/窝/牵引）",
+      "qa_checks": [
+        "包装/图案正确",
+        "logo/文字无乱码",
+        "产品形态正确",
+        "宠物形象自然",
+        "功效宣称（处方粮/治病）需资质"
+      ],
+      "negative_prompt": "宠物变形、包装变形、文字乱码、形态错误、水印、画面文字、功效夸大",
+      "compliance_ref": "母婴"
+    },
+    "auto": {
+      "name": "汽车用品（膜/垫/载/养护）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "车膜/脚垫/车载/养护剂", "required": true},
+        {"key": "fit_model", "label": "适用车型", "example": "通用/SUV/轿车", "required": true},
+        {"key": "material", "label": "材质", "example": "TPE/皮革/铝合金", "required": true},
+        {"key": "function", "label": "功能卖点", "example": "防滑/隔热/防水", "required": true},
+        {"key": "install", "label": "安装方式", "example": "免安装/粘贴/卡扣", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["产品形态", "logo/标识", "材质质感", "尺寸贴合"],
+        "ref_source": "参考图：白底图 + 细节特写 + 装车场景图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(TPE/皮/铝)", "表面(纹理/光泽)", "结构(贴合/折叠)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["装车安装", "车内展示", "防水演示", "开关动作"],
+        "example_prompt": "脚垫贴合装入车内，TPE材质防滑纹理，车内自然光干净质感"
+      },
+      "scene_light_tendency": "查 knowledge/auto-scene-light.json（10组：膜/垫/载/养护）",
+      "qa_checks": [
+        "产品形态正确",
+        "logo/标识正确",
+        "材质质感正确",
+        "尺寸贴合合理",
+        "功能演示不夸大"
+      ],
+      "negative_prompt": "形态变形、logo错乱、材质错误、贴合失真、水印、画面文字、功能夸大",
+      "compliance_ref": "3C数码"
+    },
+    "jewelry": {
+      "name": "珠宝钟表（金/玉/表）",
+      "info_card_fields": [
+        {"key": "type", "label": "品类", "example": "项链/手镯/戒指/手表", "required": true},
+        {"key": "material", "label": "材质/成色", "example": "18K金/925银/翡翠/钛金", "required": true},
+        {"key": "stone", "label": "宝石/主石", "example": "钻石/珍珠/翡翠/无", "required": false},
+        {"key": "craft", "label": "工艺", "example": "镶嵌/抛光/雕刻", "required": false},
+        {"key": "dimension", "label": "尺寸/克重", "example": "链长45cm/5g", "required": false}
+      ],
+      "anchors": {
+        "name": "一致性锚点（命门）",
+        "items": ["金属质感/颜色", "宝石位置", "链体结构", "logo/印记"],
+        "ref_source": "参考图：白底图(多角度) + 微距特写(金属/宝石) + 佩戴图"
+      },
+      "material_inference": {
+        "three_factors": ["材质(金/银/玉/钛)", "光泽(金属/珠光)", "结构(链/环/镶嵌)"],
+        "must_confirm": true
+      },
+      "motion_vocab": {
+        "name": "产品动态词库",
+        "items": ["佩戴动作", "金属反光", "宝石闪光", "转动展示"],
+        "example_prompt": "钻石项链在光下折射璀璨火彩，链体金属质感细腻，佩戴颈部特写柔光"
+      },
+      "scene_light_tendency": "查 knowledge/jewelry-scene-light.json（10组：金/银/玉/表/珍珠）",
+      "qa_checks": [
+        "金属颜色/质感正确（金色≠银色）",
+        "宝石数量/位置正确",
+        "链体结构正确",
+        "logo/印记正确",
+        "火彩/光泽不夸张到失真"
+      ],
+      "negative_prompt": "金属变形、宝石错位、链体错乱、颜色失真、火彩过曝、水印、画面文字",
+      "compliance_ref": "服装"
+    }
+  }
+}

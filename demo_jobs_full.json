@@ -1,0 +1,28 @@
+[
+  {
+    "project": "demo",
+    "sku": "knit_sweater",
+    "shot_no": 1,
+    "category": "clothing",
+    "prompt": "25岁气质温柔女性，酒红色麻花针织衫，与参考图完全一致。旧街道咖啡店场景，暖黄灯光柔和洒落，中景，固定机位。模特倚窗而立，真皮手提包自然垂落身侧，针织纹理在暖光中呈现细腻立体感。暖色调胶片颗粒，复古怀旧氛围。",
+    "negative_prompt": "形变扭曲,多余肢体,手指变形,水印,画面文字,皮肤光滑,塑料感,过度磨皮,画面模糊,穿帮",
+    "ref_images": [
+      "refs/demo/sku1/01_white.jpg"
+    ],
+    "duration_sec": 5,
+    "version_count": 1
+  },
+  {
+    "project": "demo",
+    "sku": "knit_sweater",
+    "shot_no": 2,
+    "category": "clothing",
+    "prompt": "25岁气质温柔女性，酒红色麻花针织衫，与参考图完全一致。秋日街头场景，黄昏暖光铺洒，全景，跟拍。模特自然行走，针织衫随步伐自然摆动，针织纹理在暖光中呈现立体肌理。暖色调胶片颗粒，复古怀旧氛围。",
+    "negative_prompt": "形变扭曲,多余肢体,手指变形,水印,画面文字,皮肤光滑,塑料感,过度磨皮,画面模糊,穿帮",
+    "ref_images": [
+      "refs/demo/sku1/01_white.jpg"
+    ],
+    "duration_sec": 5,
+    "version_count": 1
+  }
+]

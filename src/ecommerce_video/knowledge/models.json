@@ -1,0 +1,315 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-07",
+  "note": "视频生成模型注册表（开放接入）。默认推荐 seedance-2.0；客户可指定其他模型或自定义接入。能力参数动态影响流程：ref_images→B0收图上限；duration→分镜表时长；chinese_prompt→提示词语言；image_to_video→生成模式。能力数据以官方文档为准，接入时复核。",
+  "default_model": "seedance-2.0",
+  "models": [
+    {
+      "id": "seedance-2.0",
+      "name": "Seedance 2.0",
+      "provider": "字节跳动 / 即梦",
+      "access": "即梦开放平台 API Key",
+      "capabilities": {
+        "ref_images": 9,
+        "ref_videos": 3,
+        "ref_audio": 3,
+        "duration_min": 4,
+        "duration_max": 15,
+        "resolutions": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "native_audio_video": true,
+        "consistency_strength": "物理真实与一致性强化",
+        "chinese_prompt": "原生优",
+        "multi_ref_supported": true,
+        "need_composite": false
+      },
+      "notes": "默认推荐：服装/商品一致性表现强、中文提示词原生支持好、多模态参考（9图/3视频/3音频）",
+      "verified": true
+    },
+    {
+      "id": "seedance-2.5",
+      "name": "Seedance 2.5",
+      "provider": "字节跳动 / 即梦",
+      "access": "即梦开放平台 API Key（进阶档）",
+      "capabilities": {
+        "ref_images": 30,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 5,
+        "duration_max": 30,
+        "resolutions": [
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "timestamp_editing": true,
+        "native_audio_video": false,
+        "consistency_strength": "更强",
+        "chinese_prompt": "原生优",
+        "multi_ref_supported": true,
+        "need_composite": false
+      },
+      "notes": "进阶选项：单次30s、时间戳级编辑、最多30图参考；跑通 2.0 后再考虑",
+      "verified": true
+    },
+    {
+      "id": "kling",
+      "name": "可灵 Kling",
+      "provider": "快手",
+      "access": "可灵开放平台 API Key",
+      "capabilities": {
+        "ref_images": null,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 5,
+        "duration_max": 10,
+        "resolutions": [
+          "720p",
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "last_frame_anchor": true,
+        "motion_brush": true,
+        "native_audio_video": false,
+        "consistency_strength": "中上",
+        "chinese_prompt": "原生优",
+        "multi_ref_supported": false,
+        "need_composite": true
+      },
+      "notes": "支持首尾帧锚定+运动笔刷；参考图能力以接入时官方文档为准",
+      "verified": false
+    },
+    {
+      "id": "jimeng",
+      "name": "即梦",
+      "provider": "字节跳动",
+      "access": "即梦平台（Seedance 同源）",
+      "capabilities": {
+        "ref_images": null,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 4,
+        "duration_max": 15,
+        "resolutions": [
+          "720p",
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "native_audio_video": true,
+        "consistency_strength": "强（同 Seedance 系）",
+        "chinese_prompt": "原生优",
+        "multi_ref_supported": false,
+        "need_composite": true
+      },
+      "notes": "与 Seedance 同源，参数一致",
+      "verified": false
+    },
+    {
+      "id": "runway",
+      "name": "Runway Gen-3/4",
+      "provider": "Runway",
+      "access": "Runway API Key",
+      "capabilities": {
+        "ref_images": null,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 5,
+        "duration_max": 10,
+        "resolutions": [
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "native_audio_video": false,
+        "consistency_strength": "中",
+        "chinese_prompt": "一般（英文更稳）",
+        "multi_ref_supported": false,
+        "need_composite": true
+      },
+      "notes": "电影级质感；中文提示词支持一般，服装细节一致性弱于 Seedance 系",
+      "verified": false
+    },
+    {
+      "id": "vidu",
+      "name": "Vidu",
+      "provider": "生数科技",
+      "access": "Vidu API Key",
+      "capabilities": {
+        "ref_images": null,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 4,
+        "duration_max": 16,
+        "resolutions": [
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "first_frame_anchor": true,
+        "subject_consistency": true,
+        "native_audio_video": false,
+        "consistency_strength": "中上（主体一致模式）",
+        "chinese_prompt": "原生优",
+        "multi_ref_supported": false,
+        "need_composite": true
+      },
+      "notes": "支持主体一致性参考；具体能力以接入时文档为准",
+      "verified": false
+    },
+    {
+      "id": "custom",
+      "name": "自定义接入",
+      "provider": "任意 OpenAI 兼容接口",
+      "access": "客户提供 API Key + Base URL + 模型名",
+      "capabilities": {
+        "ref_images": null,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": null,
+        "duration_max": null,
+        "resolutions": [],
+        "image_to_video": null,
+        "text_to_video": null,
+        "first_frame_anchor": null,
+        "native_audio_video": null,
+        "consistency_strength": "未知",
+        "chinese_prompt": "未知",
+        "multi_ref_supported": null,
+        "need_composite": "按能力确认"
+      },
+      "notes": "开放接入：客户提供任意兼容模型；能力参数接入时确认并回填，未确认项按保守值处理",
+      "verified": false
+    },
+    {
+      "id": "agnes-video-v2.0",
+      "name": "Agnes Video V2.0",
+      "provider": "Agnes AI",
+      "access": "Agnes AI API Key",
+      "capabilities": {
+        "ref_images": 1,
+        "ref_videos": null,
+        "ref_audio": null,
+        "duration_min": 1,
+        "duration_max": 18,
+        "resolutions": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "image_to_video": true,
+        "text_to_video": true,
+        "keyframes": true,
+        "first_frame_anchor": true,
+        "native_audio_video": false,
+        "consistency_strength": "中（帧间视觉一致性）",
+        "chinese_prompt": "需验证",
+        "multi_ref_supported": false,
+        "need_composite": true
+      },
+      "notes": "异步任务API：POST /v1/videos → video_id 轮询；num_frames≤441 且 8n+1；时长=num_frames/frame_rate；结果 URL 在 metadata.url；当前 $0/秒；图生视频单图 image，关键帧 extra_body.image",
+      "verified": false
+    }
+  ],
+  "capability_impact": {
+    "ref_images": "决定 B0 收图上限（Seedance 2.0=9张；2.5=30张；其他按实际）",
+    "duration": "决定分镜表时长区间（4-15s 用 9 镜；支持 30s 可做长版）",
+    "chinese_prompt": "决定提示词语言（原生优=全中文；一般=建议中英对照确认）",
+    "image_to_video": "决定生成模式（支持=图生视频为主；不支持=首帧图+文生视频降级）",
+    "first_frame_anchor": "决定首帧锚定一致性策略是否可用",
+    "consistency_strength": "影响档位选择建议（弱一致性模型建议更依赖参考图锚定，避免 B 档以下）",
+    "multi_ref_supported": "决定是否走 S 合成阶段：false → 生图模型合成首帧再图生视频",
+    "need_composite": "S 阶段前置：商品+模特/场景 合成首帧"
+  },
+  "default_prompt": "客户未指定模型时：默认使用 Seedance 2.0（即梦开放平台）；如需换模型，请提供模型名 + API Key，我们将按该模型能力适配流程参数。",
+  "llm_models": {
+    "agnes-2.5-flash": {
+      "name": "Agnes 2.5 Flash",
+      "type": "多模态语言模型（视觉识别+提示词生成）",
+      "base_url": "https://apihub.agnes-ai.com/v1",
+      "endpoint": "POST /v1/chat/completions",
+      "image_input": "image_url（需公开 URL 或 base64 data URI）",
+      "context_window": "512K",
+      "max_output": "65.5K",
+      "thinking": "chat_template_kwargs.enable_thinking 或 thinking.budget_tokens",
+      "pricing": "当前 /1M tokens（免费期）",
+      "roles": [
+        "VISION_API（识别参考图）",
+        "TEXT_LLM（AI 提示词引擎）"
+      ]
+    }
+  },
+  "image_models": {
+    "agnes-image-2.1-flash": {
+      "name": "Agnes Image 2.1 Flash",
+      "type": "图像生成（文生图/图生图/多图合成）",
+      "base_url": "https://apihub.agnes-ai.com/v1",
+      "endpoint": "POST /v1/images/generations",
+      "capabilities": {
+        "text_to_image": true,
+        "image_to_image": true,
+        "multi_image_compose": true,
+        "image_input": "URL 或 Data URI Base64（本地图自动转）",
+        "size_system": "size档位(1K/2K/3K/4K)+ratio(1:1/9:16等)",
+        "output": "url 或 b64_json（extra_body.response_format）",
+        "composition_preserve": true,
+        "pricing": "当前 $0/张"
+      },
+      "roles": [
+        "合成首帧(S阶段)",
+        "样衣概念图(C档)",
+        "场景概念图"
+      ],
+      "notes": "多图合成=商品+模特/场景合成首帧；response_format 必须在 extra_body 不在顶层；图生图无需 tags"
+    },
+    "custom-image": {
+      "name": "自定义接入（OpenAI 兼容生图）",
+      "type": "图像生成（OpenAI /images/generations + /images/edits 兼容）",
+      "base_url": "客户提供",
+      "endpoint": "POST /images/generations（有参考图时先试 /images/edits，失败回退文生图）",
+      "capabilities": {
+        "text_to_image": true,
+        "image_to_image": false,
+        "multi_image_compose": false,
+        "image_input": "URL（本地图建议先转公网或 data URI）",
+        "size_system": "1024x1024",
+        "output": "url 或 b64_json（data[].url / data[].b64_json）"
+      },
+      "roles": [
+        "合成首帧(S阶段)",
+        "样衣概念图(C档)"
+      ],
+      "notes": "开放接入默认落点：客户提供任意 OpenAI 兼容端点；能力保守（未确认的图生图/多图合成按不支持处理），接入时按官方文档回填"
+    },
+    "seedance": {
+      "name": "Seedance/即梦（生图同族）",
+      "type": "图像生成（即梦同族；当前实现与 custom 同构，OpenAI 兼容）",
+      "base_url": "https://apihub.agnes-ai.com/v1",
+      "endpoint": "POST /images/generations（有参考图时先试 /images/edits）",
+      "capabilities": {
+        "text_to_image": true,
+        "image_to_image": false,
+        "multi_image_compose": false,
+        "image_input": "URL 或 Data URI Base64（本地图自动转）",
+        "size_system": "1024x1024",
+        "output": "url 或 b64_json"
+      },
+      "roles": [
+        "合成首帧(S阶段)",
+        "样衣概念图(C档)"
+      ],
+      "notes": "与 Seedance 同源同族；生图能力保守按 OpenAI 兼容处理，即梦原生生图端点接入时按官方文档复核并回填"
+    }
+  }
+}

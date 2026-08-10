@@ -1,0 +1,23 @@
+# 密钥与环境
+.env
+
+# 生成产物
+output/
+data/*.db
+data/*.db-wal
+data/*.db-shm
+
+# 临时
+__pycache__/
+*.pyc
+demo_jobs.json
+
+# Python 包工程（追加）
+dist/
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+jobs/
+00-项目进度快照.md
+refs/

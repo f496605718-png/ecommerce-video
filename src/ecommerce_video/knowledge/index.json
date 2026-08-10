@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-08-09",
+  "note": "知识库检索索引。用法：程序/AI 先读本索引 → 按检索路径定位文件 → 按 id/tags 取条目，避免全量加载。retriever.py 按本索引定位文件，按需加载，不全量读入。",
+  "files": [
+    {
+      "file": "fabric-scene-light.json",
+      "content": "面料×场景×光线对照（30组）",
+      "item_count": 30,
+      "groups": ["光泽感", "哑光自然", "硬挺结构", "运动弹性", "特殊氛围"],
+      "tags": ["面料", "场景", "光线", "提示词"],
+      "id_prefix": "面料id如 satin/denim/cashmere",
+      "typical_query": "某面料的场景/光线/提示词片段怎么写"
+    },
+    {
+      "file": "scene-aliases.json",
+      "content": "场景别名映射表（分镜场景词/客户口吻 → 知识库场景条目，retriever 场景匹配前展开）",
+      "item_count": 81,
+      "groups": [],
+      "tags": ["场景", "别名", "映射"],
+      "id_prefix": "别名词如 美术馆/街头/海边",
+      "typical_query": "分镜场景词（简写/口吻）→ 对应光线条目"
+    },
+    {
+      "file": "types.json",
+      "content": "12种视频类型（含六维匹配权重）",
+      "item_count": 12,
+      "groups": ["TVC", "杂志", "街拍", "剧情", "功能", "开箱", "氛围", "国风", "赛博", "极简", "复古", "UGC"],
+      "tags": ["类型", "风格", "镜头序列", "六维匹配"],
+      "id_prefix": "类型id如 tvc/street/minimal",
+      "typical_query": "推荐什么风格/类型镜头序列/类型特征词"
+    },
+    {
+      "file": "category-profiles.json",
+      "content": "品类知识包（字段集/锚点/动态词库/质检/负面词/合规引用）",
+      "item_count": 14,
+      "groups": ["服装", "美妆", "食品", "3C数码", "家居"],
+      "tags": ["品类", "锚点", "动态词库", "质检", "负面词"],
+      "id_prefix": "品类id如 clothing/beauty/food",
+      "typical_query": "某品类的信息卡字段/一致性锚点/产品动态/质检项"
+    },
+    {
+      "file": "vocab.json",
+      "content": "通用词库（灯光/运镜/镜头/画质/负面词）",
+      "item_count": 42,
+      "groups": ["lighting", "camera_movement", "lens_shot", "quality", "negative_general"],
+      "tags": ["灯光", "运镜", "镜头", "画质", "负面词"],
+      "id_prefix": "词id如 softbox/orbit/closeup",
+      "typical_query": "灯光/运镜/景别术语的中文写法"
+    },
+    {
+      "file": "beauty-scene-light.json",
+      "content": "美妆×场景×光线对照（彩妆/护肤/香氛，15组）",
+      "item_count": 15,
+      "groups": ["彩妆", "护肤", "香氛/其他"],
+      "tags": ["美妆", "场景", "光线", "提示词"],
+      "id_prefix": "lipstick/serum/perfume 等",
+      "typical_query": "美妆产品（口红/精华/香水）的场景光线提示词"
+    },
+    {
+      "file": "food-scene-light.json",
+      "content": "食品×场景×光线对照（热食/甜点饮品/零食生鲜/酒饮，17组）",
+      "item_count": 17,
+      "groups": ["热食", "甜点饮品", "零食生鲜", "酒饮/其他"],
+      "tags": ["食品", "场景", "光线", "提示词", "食欲感"],
+      "id_prefix": "baking/hotpot/coffee 等",
+      "typical_query": "食品（烘焙/火锅/饮品）的食欲感场景光线提示词"
+    },
+    {
+      "file": "digital3c-scene-light.json",
+      "content": "3C×场景×光线对照（随身/桌面/影音/拍摄，13组）",
+      "item_count": 13,
+      "groups": ["随身", "桌面", "影音娱乐", "拍摄/户外"],
+      "tags": ["3C", "场景", "光线", "提示词"],
+      "id_prefix": "phone/laptop/drone 等",
+      "typical_query": "3C产品（手机/笔记本/耳机）的场景光线提示词"
+    },
+    {
+      "file": "home-scene-light.json",
+      "content": "家居×场景×光线对照（客厅/卧室/餐厨/收纳/卫浴，14组）",
+      "item_count": 14,
+      "groups": ["客厅", "卧室", "餐厨", "收纳装饰", "卫浴/其他"],
+      "tags": ["家居", "场景", "光线", "提示词"],
+      "id_prefix": "sofa/bedding/lamp 等",
+      "typical_query": "家居产品（沙发/床品/灯具）的场景光线提示词"
+    },
+    {
+      "file": "shoes-scene-light.json",
+      "content": "鞋靴×场景×光线对照（运动/休闲/正装靴，9组）",
+      "item_count": 9,
+      "groups": ["运动", "休闲", "正装靴"],
+      "tags": ["鞋靴", "场景", "光线", "提示词"],
+      "id_prefix": "sneaker/boots/heels 等",
+      "typical_query": "鞋靴（运动鞋/皮鞋/靴子）的场景光线提示词"
+    },
+    {
+      "file": "bags-scene-light.json",
+      "content": "箱包×场景×光线对照（通勤/休闲/旅行，7组）",
+      "item_count": 7,
+      "groups": ["通勤", "休闲", "旅行"],
+      "tags": ["箱包", "场景", "光线", "提示词"],
+      "id_prefix": "handbag/backpack/luggage 等",
+      "typical_query": "箱包（手提/双肩/旅行箱）的场景光线提示词"
+    },
+    {
+      "file": "accessories-scene-light.json",
+      "content": "配饰×场景×光线对照（帽/巾/带/镜，6组）",
+      "item_count": 6,
+      "groups": ["头饰", "腰饰", "眼镜/其他"],
+      "tags": ["配饰", "场景", "光线", "提示词"],
+      "id_prefix": "cap/scarf/belt/glasses 等",
+      "typical_query": "配饰（帽子/围巾/腰带/眼镜）的场景光线提示词"
+    },
+    {
+      "file": "personalcare-scene-light.json",
+      "content": "个护×场景×光线对照（洗护/口腔/剃须，6组）",
+      "item_count": 6,
+      "groups": ["洗护", "口腔", "剃须/其他"],
+      "tags": ["个护", "场景", "光线", "提示词"],
+      "id_prefix": "shampoo/toothpaste/shaver 等",
+      "typical_query": "个护（洗发水/牙膏/剃须刀）的场景光线提示词"
+    },
+    {
+      "file": "baby-scene-light.json",
+      "content": "母婴×场景×光线对照（喂养/护理/玩耍出行，7组）",
+      "item_count": 7,
+      "groups": ["喂养", "护理", "玩耍出行"],
+      "tags": ["母婴", "场景", "光线", "提示词"],
+      "id_prefix": "milkpowder/diaper/stroller 等",
+      "typical_query": "母婴（奶粉/纸尿裤/玩具/推车）的场景光线提示词"
+    },
+    {
+      "file": "sports-scene-light.json",
+      "content": "运动户外×场景×光线对照（健身/露营/骑行球类，8组）",
+      "item_count": 8,
+      "groups": ["健身", "露营", "骑行球类"],
+      "tags": ["运动户外", "场景", "光线", "提示词"],
+      "id_prefix": "fitness/tent/bike 等",
+      "typical_query": "运动户外（健身器材/帐篷/自行车）的场景光线提示词"
+    },
+    {
+      "file": "pet-scene-light.json",
+      "content": "宠物用品×场景×光线对照（喂养/卫生/玩具窝具，7组）",
+      "item_count": 7,
+      "groups": ["喂养", "卫生", "玩具窝具"],
+      "tags": ["宠物", "场景", "光线", "提示词"],
+      "id_prefix": "petfood/litter/petbed 等",
+      "typical_query": "宠物用品（猫粮/猫砂/宠物窝）的场景光线提示词"
+    },
+    {
+      "file": "auto-scene-light.json",
+      "content": "汽车用品×场景×光线对照（内饰/外饰养护，6组）",
+      "item_count": 6,
+      "groups": ["内饰", "外饰养护"],
+      "tags": ["汽车用品", "场景", "光线", "提示词"],
+      "id_prefix": "footmat/film/charger 等",
+      "typical_query": "汽车用品（脚垫/车膜/车载）的场景光线提示词"
+    },
+    {
+      "file": "jewelry-scene-light.json",
+      "content": "珠宝钟表×场景×光线对照（金/玉/珍珠/表，6组）",
+      "item_count": 6,
+      "groups": ["金属饰品", "宝石玉石", "钟表"],
+      "tags": ["珠宝钟表", "场景", "光线", "提示词"],
+      "id_prefix": "necklace/jade/watch_j 等",
+      "typical_query": "珠宝钟表（项链/翡翠/手表）的场景光线提示词"
+    },
+    {
+      "file": "profiles/*.profile.json",
+      "content": "行业级拍摄知识体系（14品类×11模块）：M1品类画像/M2风格体系/M3镜头语言/M4光影/M5动态表演/M6场景/M7造型规范/M8行业避坑/M9质检/M10负面词三级/M11类型适配",
+      "item_count": 14,
+      "groups": ["clothing", "beauty", "food", "digital3c", "home", "shoes", "bags", "accessories", "personalcare", "baby", "sports", "pet", "auto", "jewelry"],
+      "tags": ["品类profile", "11模块", "行业级", "拍摄知识"],
+      "id_prefix": "模块id如 M3_lens_language",
+      "typical_query": "某品类的镜头语言/光影方案/造型规范/质检标准/类型适配"
+    },
+    {
+      "file": "models.json",
+      "content": "视频生成模型注册表（开放接入）：Seedance 2.0/2.5/可灵/即梦/Runway/Vidu/自定义 + 能力参数（参考图上限/时长/中文/图生视频/一致性）+ 能力对流程影响映射",
+      "item_count": 8,
+      "groups": ["默认模型", "国产模型", "国际模型", "自定义"],
+      "tags": ["视频模型", "开放接入", "能力参数"],
+      "id_prefix": "seedance-2.0/kling/runway/custom 等",
+      "typical_query": "选定模型的能力参数/对流程的影响"
+    },
+    {
+      "file": "compliance.json",
+      "content": "品类合规红线（通用6条+9品类+视频4检查）",
+      "item_count": 9,
+      "groups": ["通用红线", "品类红线", "视频检查项"],
+      "tags": ["合规", "红线", "广告法"],
+      "id_prefix": "G1-G6/V1-V4/品类名",
+      "typical_query": "某品类的合规红线/质检时的合规检查项"
+    }
+  ],
+  "retrieval_paths": [
+    {"step": "A0商品信息卡", "query": "品类字段/一致性锚点", "target": "category-profiles.json → 按品类id取profile"},
+    {"step": "B0.5场景别名展开", "query": "分镜场景词→规范场景", "target": "scene-aliases.json → aliases[]（retriever 匹配场景前先查；文件缺失降级直接匹配，不抛异常）"},
+    {"step": "B1识别", "query": "材质推断三要素/识别字段", "target": "category-profiles.json → profile.material_inference"},
+    {"step": "B2.5类型推荐", "query": "六维打分", "target": "types.json → 各类型 category_match/fabric_match/price_match/occasion_match/season_match/tone_match 字段"},
+    {"step": "C分档后拼装提示词", "query": "面料词/灯光词/运镜词/镜头词/负面词", "target": "fabric-scene-light.json(按面料id) + vocab.json(按词id)"},
+    {"step": "C分档后拼装提示词（非服装品类）", "query": "美妆/食品/3C/家居的场景光线词", "target": "beauty-scene-light.json / food-scene-light.json / digital3c-scene-light.json / home-scene-light.json（按品类id） + vocab.json"},
+    {"step": "C分档后拼装提示词（鞋包配饰/个护/母婴/运动/宠物/汽车/珠宝）", "query": "对应品类场景光线词", "target": "shoes/bags/accessories/personalcare/baby/sports/pet/auto/jewelry-scene-light.json（按品类id） + vocab.json"},
+    {"step": "D确认单", "query": "动态锚定示例", "target": "category-profiles.json → profile.motion_vocab.example_prompt"},
+    {"step": "E质检", "query": "品类质检项+合规检查", "target": "category-profiles.json → profile.qa_checks + compliance.json → video_specific_checks"},
+    {"step": "F批量", "query": "（无知识查询）", "target": "—"}
+  ],
+  "quick_index": {
+    "按面料": "fabric-scene-light.json → groups.光泽感/哑光自然/… → items[].tags",
+    "按场景别名": "scene-aliases.json → aliases[].targets（分镜场景词展开）",
+    "按品类": "category-profiles.json → profiles[品类id]",
+    "按类型": "types.json → types[类型id]",
+    "按词类": "vocab.json → lighting/camera_movement/lens_shot/quality",
+    "按合规": "compliance.json → category_rules[品类]"
+  }
+}

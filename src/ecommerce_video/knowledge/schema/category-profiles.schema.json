@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "品类知识包索引 Schema",
+  "description": "校验 knowledge/category-profiles.json。profiles 是 object，key 为品类 id（如 clothing/beauty/food），value 为该品类的知识包 profile。每个 profile 必含 info_card_fields/anchors/material_inference/motion_vocab/qa_checks/negative_prompt/compliance_ref。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "profiles"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "profiles": {
+      "type": "object",
+      "description": "key 为品类 id，value 为品类知识包",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["info_card_fields", "anchors", "material_inference", "motion_vocab", "qa_checks", "negative_prompt", "compliance_ref"],
+        "properties": {
+          "name": { "type": "string", "description": "品类中文名" },
+          "info_card_fields": {
+            "type": "array",
+            "description": "商品信息卡字段集",
+            "items": {
+              "type": "object",
+              "required": ["key", "label", "example", "required"],
+              "properties": {
+                "key": { "type": "string", "description": "字段英文 key" },
+                "label": { "type": "string", "description": "字段中文标签" },
+                "example": { "type": "string", "description": "示例值" },
+                "required": { "type": "boolean", "description": "是否必填" }
+              }
+            }
+          },
+          "anchors": {
+            "type": "object",
+            "required": ["name", "items", "ref_source"],
+            "description": "一致性锚点（命门）",
+            "properties": {
+              "name": { "type": "string" },
+              "items": { "type": "array", "items": { "type": "string" } },
+              "ref_source": { "type": "string", "description": "参考图来源说明" }
+            }
+          },
+          "material_inference": {
+            "type": "object",
+            "required": ["three_factors", "must_confirm"],
+            "description": "材质推断三要素",
+            "properties": {
+              "three_factors": { "type": "array", "items": { "type": "string" } },
+              "must_confirm": { "type": "boolean" }
+            }
+          },
+          "motion_vocab": {
+            "type": "object",
+            "required": ["name", "items", "example_prompt"],
+            "description": "产品动态词库",
+            "properties": {
+              "name": { "type": "string" },
+              "items": { "type": "array", "items": { "type": "string" } },
+              "example_prompt": { "type": "string" }
+            }
+          },
+          "scene_light_tendency": { "type": "string", "description": "场景光线倾向说明（可空）" },
+          "qa_checks": { "type": "array", "items": { "type": "string" }, "description": "质检项列表" },
+          "negative_prompt": { "type": "string", "description": "品类级负面词（逗号分隔字符串）" },
+          "compliance_ref": { "type": "string", "description": "引用的合规品类名（对应 compliance.json category_rules[].category）" }
+        }
+      }
+    }
+  }
+}

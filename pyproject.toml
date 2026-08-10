@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecommerce-video"
+version = "1.5.0"
+description = "电商 AI 视频生成工作流：知识库驱动的提示词引擎 + 开放模型接入 + 批量生成"
+requires-python = ">=3.9"
+dependencies = ["requests>=2.28", "python-dotenv>=1.0"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+ecommerce-video = "ecommerce_video.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["ecommerce_video", "ecommerce_video.providers"]
+
+[tool.setuptools.package-data]
+ecommerce_video = ["prompt_gen_template.md", "knowledge/**/*.json", "knowledge/**/*.md", "knowledge/**/*.js", "knowledge/schema/*.json", "knowledge/raw/**/*.md", "knowledge/profiles/*.json", "knowledge/profiles/*.md"]

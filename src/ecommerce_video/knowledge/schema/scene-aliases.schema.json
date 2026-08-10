@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "场景别名映射表 Schema",
+  "description": "校验 knowledge/scene-aliases.json。aliases 是 array，每项含 alias（string 必填）/category（enum clothing/beauty/food，可空即允许 null）/targets（string 数组必填且至少 1 个，指向对应品类 scene-light 文件 items[].id，存在性由 validate_kb.py 跨文件检查）/note（可空）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "aliases"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["alias", "targets"],
+        "properties": {
+          "alias": { "type": "string", "minLength": 1, "description": "分镜场景词/客户口吻词，必填非空" },
+          "category": {
+            "type": ["string", "null"],
+            "enum": ["clothing", "beauty", "food", null],
+            "description": "目标品类：clothing/beauty/food，可空（空则不校验 targets 存在性）"
+          },
+          "targets": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" },
+            "description": "映射到的 scene-light 条目 id 列表，至少 1 个"
+          },
+          "note": { "type": "string", "description": "映射说明（可空）" }
+        }
+      }
+    }
+  }
+}

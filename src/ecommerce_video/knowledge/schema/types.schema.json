@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "视频类型 Schema",
+  "description": "校验 knowledge/types.json。types 是 array，每项含 id/name/icon/shot_sequence/style_dna 及六维匹配字段（category_match/fabric_match/price_match/occasion_match/season_match/tone_match），另有 material_match（质感维度，非服装品类用）等可选字段。注意：实际数据用 style_dna（风格特征词数组），不使用 style_dna_words/rhythm（那是 profile M11 sequences 条目的字段名）。",
+  "type": "object",
+  "required": ["schema_version", "updated", "note", "types"],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "updated": { "type": "string" },
+    "note": { "type": "string" },
+    "types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "icon", "shot_sequence", "style_dna", "category_match", "fabric_match", "price_match", "occasion_match", "season_match", "tone_match"],
+        "properties": {
+          "id": { "type": "string", "description": "类型 id（如 tvc/street/minimal）" },
+          "name": { "type": "string" },
+          "icon": { "type": "string", "description": "序号图标（如 ①）" },
+          "positioning": { "type": "string" },
+          "lens_language": { "type": "string" },
+          "light": { "type": "string" },
+          "style_dna": { "type": "array", "items": { "type": "string" }, "description": "风格特征词数组" },
+          "duration": { "type": "string" },
+          "ai_difficulty": { "type": "integer", "description": "AI 实现难度 1-5" },
+          "avoid": { "type": "string" },
+          "shot_sequence": { "type": "array", "items": { "type": "string" }, "description": "镜头序列（分镜表骨架）" },
+          "category_match": { "type": "array", "items": { "type": "string" } },
+          "fabric_match": { "type": "array", "items": { "type": "string" } },
+          "material_match": { "type": "array", "items": { "type": "string" }, "description": "质感维度（非服装品类用）" },
+          "price_match": { "type": "array", "items": { "type": "string" } },
+          "occasion_match": { "type": "array", "items": { "type": "string" } },
+          "season_match": { "type": "array", "items": { "type": "string" } },
+          "tone_match": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

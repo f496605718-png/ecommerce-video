@@ -1,0 +1,98 @@
+# ecommerce-video 持续集成（CI）工作流
+#
+# 触发：推送到 main 分支，以及针对 main 的 Pull Request。
+# 矩阵：Python 3.9（requires-python 下限）与 3.12（当前最新稳定版），系统统一 ubuntu-latest。
+#
+# 步骤序列：
+#   1. checkout → 2. setup-python（矩阵）→ 3. pip install -e .（自动安装 requests / python-dotenv）
+#   4. 主测试套件（7 个文件，109 用例，零第三方依赖，unittest）
+#   5. 开放接入集成套件（4 用例，本地 mock server 起在 127.0.0.1，零真实网络；必须与主套件分开跑）
+#   6. 知识库校验 kbcheck（35 个 JSON 逐一 Schema 校验，35/35）
+#   7. 打包 build_package.py → dist/ecommerce-ai-video-workflow-v1.5.0.zip
+#   8. 打包产物纯净安装冒烟：解压 zip → 新建 venv → pip install 解压出的包目录
+#      → import ecommerce_video 打印版本 → ecommerce-video kbcheck 35/35
+#
+# 红线：
+#   - 本工作流不执行任何需要真实 API Key 的命令（gen / run / recognize 等一律不跑）；
+#   - 不引入第三方测试依赖（unittest 即可）；
+#   - 不添加 shields.io badge 相关配置。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: 测试与打包冒烟（Python ${{ matrix.python-version }}）
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.12']
+
+    steps:
+      # 1) 拉取代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 2) 安装矩阵指定版本 Python（带 pip 缓存，加速依赖安装）
+      - name: 配置 Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      # 3) 以可编辑模式安装包（src 布局，必须先安装才能 import；
+      #    同时自动安装运行时依赖 requests / python-dotenv）
+      - name: 安装包（pip install -e .）
+        run: pip install -e .
+
+      # 4) 主测试套件：7 个文件 109 用例（零第三方依赖，unittest 直接跑）
+      - name: 主测试套件（109 用例）
+        run: |
+          python -m unittest \
+            tests.test_workflow \
+            tests.test_retriever \
+            tests.test_providers \
+            tests.test_capability \
+            tests.test_kb_integrity \
+            tests.test_config_keys \
+            tests.test_cli
+
+      # 5) 集成测试套件：4 用例（本地 mock server，端到端验证开放接入链路）。
+      #    注意：与主套件分开跑（集成套件会改写全局环境变量，混跑会互相干扰）。
+      - name: 集成测试套件（4 用例，mock server）
+        run: python -m unittest tests.test_custom_integration
+
+      # 6) 知识库校验：35 个 JSON 文件逐一 Schema 校验（35/35 通过）
+      - name: 知识库校验（kbcheck 35/35）
+        run: ecommerce-video kbcheck
+
+      # 7) 打包：dist/ecommerce-ai-video-workflow-v1.5.0.zip
+      #    （标准 src 布局，zip 内顶层 ecommerce-video/，知识库在包内）
+      - name: 构建发布包
+        run: python build_package.py
+
+      # 8) 打包产物纯净安装冒烟（模拟用户拿到 zip 后的完整安装路径）：
+      #    解压 zip → 新建 venv → pip install 解压出的包目录 → import 打印版本 → kbcheck 35/35。
+      #    注：Linux 下 venv 可执行文件在 bin/（Windows 才是 Scripts/），本矩阵为 ubuntu-latest，用 bin/。
+      - name: 纯净安装冒烟（解压 → venv → pip install → import + kbcheck）
+        shell: bash
+        run: |
+          set -euo pipefail
+          SMOKE_DIR=/tmp/ecommerce-video-smoke
+          rm -rf "$SMOKE_DIR"
+          mkdir -p "$SMOKE_DIR"
+          # 用 python -m zipfile 解压（不依赖系统 unzip）
+          python -m zipfile -e "dist/ecommerce-ai-video-workflow-v1.5.0.zip" "$SMOKE_DIR"
+          # 新建独立虚拟环境（与当前环境完全隔离，验证发布包可纯净安装）
+          python -m venv "$SMOKE_DIR/venv"
+          # 从解压出的包目录安装（zip 内顶层目录为 ecommerce-video/）
+          "$SMOKE_DIR/venv/bin/python" -m pip install "$SMOKE_DIR/ecommerce-video"
+          # 冒烟 1：import 并打印版本（应为 1.5.0）
+          "$SMOKE_DIR/venv/bin/python" -c "import ecommerce_video; print('version:', ecommerce_video.__version__)"
+          # 冒烟 2：知识库校验 35/35（包内知识库随包安装，开箱即用）
+          "$SMOKE_DIR/venv/bin/ecommerce-video" kbcheck
