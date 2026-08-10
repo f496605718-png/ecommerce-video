@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ecommerce-video"
 version = "1.5.0"
-description = "电商 AI 视频生成工作流：知识库驱动的提示词引擎 + 开放模型接入 + 批量生成"
+description = "电商 AI 视频生产流水线：知识库驱动 14 品类每镜精准注入 + 开放模型接入（custom 零代码）+ 批量生成，CLI 与 Python API 双入口"
 requires-python = ">=3.9"
 dependencies = ["requests>=2.28", "python-dotenv>=1.0"]
 

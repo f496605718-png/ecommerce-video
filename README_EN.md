@@ -1,56 +1,23 @@
 # ecommerce-video
 
-An AI video generation workflow for e-commerce: knowledge-base-driven prompt engine + open model integration + batch generation.
+**One product image → one ready-to-run ad video.**
 
-**In one sentence:** a pip-installable Python package that turns "reference images → storyboard → Chinese prompts → batch video generation" into one pipeline. Prompts are injected per-shot from a curated knowledge base; model access is open — not bound to any single vendor.
+ecommerce-video is an AI video production workflow built for e-commerce: a knowledge-base-driven prompt engine + open model integration + batch generation. It is not another "type a description, get a video" toy — it is a **complete pipeline from reference images to finished videos**: recognition, per-shot prompt writing, capability validation, batch generation, QA and delivery. Every stage is designed around real e-commerce client workflows; installable, embeddable, commercially usable.
 
 > Current version: v1.5.0 (src layout, pip-installable; Python ≥ 3.9)
 
-## Highlights
+## Why this project
 
-- **Open model integration — zero-code `custom` is the main path**: any OpenAI-compatible endpoint (self-hosted gateway, aggregator, etc.) connects via `.env` only, for video / image / LLM chains alike. Non-compatible vendors (signature-based APIs) need only a 30–50 line provider class (see `docs/PROVIDERS.md`)
-- **Knowledge-base driven, 14 e-commerce categories**: 35 JSON files (category profiles, scene-light, aliases, compliance, models…) validated programmatically (`kbcheck` 35/35)
-- **Per-shot precise injection, no prompt stuffing**: the retriever matches sources per shot (4-level matching: material / exact / alias / tags) instead of dumping 4000–6000 chars into every prompt
-- **All-Chinese prompts**: 3-layer prompt rules (L1 anchor / L2 dynamics / L3 material) + 7 elements, strictly Chinese output
-- **Batch generation + capability gating**: tasks exceeding the selected model's registered capabilities in `knowledge/models.json` (ref-image count / duration / resolution / image-to-video mode) are blocked before generation
-- **Compliance red-line blocking**: categories without qualification (medical / pharma / health products) are refused by the workflow (`knowledge/compliance.json`)
-- **Test baseline**: 78 main-suite tests + 4 open-access integration tests (local mock server, end-to-end), all green
-
-## Quick Start
-
-```bash
-# 1. Install (either way)
-pip install ecommerce-video          # way 1: published package
-# or unzip the release package, then: pip install .   # way 2: source package
-
-# 2. Initialize the database
-ecommerce-video init
-
-# 3. Configure .env (copy .env.example to .env and fill in your API keys)
-#    No keys? You can still try the key-free steps: check / dry / validate / kbcheck
-
-# 4. Config self-check (run before taking orders; missing items are listed)
-ecommerce-video check
-
-# 5. Key-free demo: meta-prompt dry run + jobs validation + KB validation
-ecommerce-video dry demo_storyboard.json
-ecommerce-video validate demo_jobs.json
-ecommerce-video kbcheck
-
-# 6. Full pipeline (commands below need real API keys)
-ecommerce-video gen demo_storyboard.json -o jobs.json   # AI prompt generation (needs LLM key)
-ecommerce-video import jobs.json                         # import jobs (each job needs project/sku/category)
-ecommerce-video confirm-all demo                        # issue admission tickets
-ecommerce-video run --limit 5                           # batch generation (needs a real API key)
-ecommerce-video status                                  # status summary
-```
-
-> Note: `demo_jobs.json` is a prompt-only sample (shot_no/prompt/negative_prompt) — fine for `validate`; `import` requires each job to carry `project`/`sku`/`category` (importable sample: `demo_jobs_full.json`). Add those fields to `gen` output before importing.
-
-## CLI Commands (11)
-
-| Command | Purpose | Key needed |
-|---------|---------|------------|
+| Pain point | What ecommerce-video does |
+|------------|---------------------------|
+| Prompts are imprecise; generated videos don't look like the product | 14-category knowledge base + per-shot precise injection: 4-level matching (material/scene/light/camera), no prompt stuffing |
+| Switching models means rewriting code and learning new APIs | Open integration: OpenAI-compatible endpoints connect via .env with zero code; private vendors write a 30-50 line provider class |
+| English prompts drift in style, don't fit Chinese e-commerce taste | All-Chinese prompts with a 3-layer rule (L1 anchor / L2 dynamics / L3 material), consistency first |
+| Jobs fail halfway because they exceed model capabilities | Capability gating: ref-image count / duration / resolution / image-to-video mode validated before enqueueing |
+| Medical/pharma/health orders slip through | Compliance red-lines: categories without qualification are blocked at the workflow level |
+| Client confirmation is a mess | Confirmation gate + confirmation sheet (admission ticket): traceable jobs, recorded delivery |
+| Want to try before committing | Local mock end-to-end verification + 109 main tests + 4 integration tests all green, kbcheck validates the knowledge base 35/35 |
+---------|---------|------------|
 | `check` | Config self-check | no (missing items are reported) |
 | `status` | Job status summary | no |
 | `init` | Initialize database | no |

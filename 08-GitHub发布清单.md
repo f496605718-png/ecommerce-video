@@ -6,14 +6,10 @@
 ## 一、仓库初始化
 
 - [x] `git init` 已在项目目录独立执行成功（嵌套于家目录仓库，无冲突）
-- [x] 首次提交内容已暂存（`git add -A`，共 140 文件：源码 / knowledge 知识库 / tests / 文档 / CI / examples / data/schema.sql 等）
+- [x] 首次提交已暂存并完成（`git commit` 已执行；141 文件入库：源码 / knowledge 知识库 / tests / 文档 / CI / examples / data/schema.sql 等）
 - [x] .gitignore 已追加两行：`00-项目进度快照.md`、`refs/`（原有规则未动）
 - [x] `git status` 人工复核：无 .env / *.db / 00-快照 / refs / output / jobs / dist 等敏感项
-- [ ] **待办：配置 git 身份**（当前 user.name / user.email 均未配置，首次提交被 git 拒绝）：
-  - `git config --global user.name "你的名字"`
-  - `git config --global user.email "you@example.com"`
-  - 然后补上首次提交（文件已全部暂存好）：
-  - `git commit -m "chore: v1.5.0 发布准备（开源文档/CI/示例/键名修复）"`
+- [x] **git 身份已配置（项目级）**：`jasonlau` / `jasonlau1990@users.noreply.github.com`（2026-08-10 已重写历史，全部 commit 作者为 jasonlau；账号用户名 2026-08-10 由 f496605718-png 改为 jasonlau1990，仓库地址 https://github.com/jasonlau1990/ecommerce-video；想换真实姓名邮箱：`git config user.name/email` 后重新提交即可）
 
 ## 二、GitHub 建仓步骤（网页操作）
 
@@ -77,6 +73,6 @@ ecommerce-video v1.5.0：开源电商 AI 视频生成工作流 —— 知识库�
 
 ## 六、发布后待办
 
-- [ ] `ci.yml` 首次实跑：push 后 GitHub Actions 双 Python 版本跑通（含冒烟脚本 v1.5.0 zip 校验）
+- [x] `ci.yml` 首次实跑：**已通过**（run 31345947777，Python 3.9 + 3.12 双版本全绿：109 主测试 + 4 集成 + kbcheck 35/35 + 打包 + 纯净安装冒烟）。期间发现并修复 2 个 CI 暴露问题：① 3.9 兼容（7+1 个文件补 `from __future__ import annotations`，commit eeb57ab/e204c43）；② stats 测试依赖本地 DB（TestWorkflowStats 加临时 DB 隔离，同 commit eeb57ab）
 - [ ] PyPI 发布评估（可选，需用户决策：是否发布到 PyPI；若发布需补 twine 流程与 PyPI 账号）
 - [ ] 关注首个 issue / star，收集 README 使用反馈
