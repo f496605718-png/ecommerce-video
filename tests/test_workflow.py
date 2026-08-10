@@ -16,6 +16,7 @@
 （套件保持全绿，日志显示 skipped 原因）；文件落地后自动转为真实断言。
 """
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -40,6 +41,8 @@ if WORKFLOW_FILE.exists():
 else:
     Workflow = None
     WORKFLOW_AVAILABLE = False
+
+from ecommerce_video import db  # noqa: E402  （stats 测试隔离用：临时 DB 重定向）
 
 
 def _shot(result, shot_no):
@@ -159,7 +162,21 @@ class TestWorkflowGenerateDryRun(WorkflowContractTest):
 
 
 class TestWorkflowStats(WorkflowContractTest):
-    """5. stats()：返回 dict（流程统计）。"""
+    """5. stats()：返回 dict（流程统计）。
+
+    CI 隔离：stats() 查 SQLite jobs 表。本地开发机有 data/video_jobs.db 所以一直绿，
+    CI 全新环境没有该库 → 本类 setUp 把 DB 重定向到临时文件并 init_db()
+    （不污染项目 data/，与 tests/test_custom_integration.py 同款做法）。
+    """
+
+    def setUp(self):
+        self._tmp = Path(tempfile.mkdtemp(prefix="ecom_stats_"))
+        self._db_orig = (db.DB_PATH, db.SCHEMA)
+        db.DB_PATH = self._tmp / "video_jobs.db"
+        db.init_db()
+
+    def tearDown(self):
+        db.DB_PATH, db.SCHEMA = self._db_orig
 
     def test_stats_returns_dict(self):
         w = self.make_workflow()

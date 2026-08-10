@@ -20,6 +20,8 @@
 - ctx：逐调用上下文 dict（如 {"warnings": [...]}），可携带 api_key/api_base/model
   覆盖全局 config（见 _api_config），供第三方接入方做多账号/多端点路由。
 """
+from __future__ import annotations
+
 import json
 import sys
 import time

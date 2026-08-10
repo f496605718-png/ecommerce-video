@@ -14,6 +14,8 @@
   knowledge/models.json 对应条目（视频 models[] / 生图 image_models{}），
   查不到用保守默认值（base.DEFAULT_CAPABILITIES / image_base.DEFAULT_IMAGE_CAPABILITIES）。
 """
+from __future__ import annotations
+
 from .base import (VideoGenError, VideoProvider, DEFAULT_CAPABILITIES,
                    load_capabilities, download_file,
                    _request, _auth_headers, _proxies, _extract_url, _URL_KEYS)

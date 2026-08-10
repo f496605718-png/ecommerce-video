@@ -21,6 +21,8 @@
 新增 provider：在 providers/ 新建 image_<name>.py 实现 ImageProvider 并 @register_image，
 无需改动本文件与任何调用方。
 """
+from __future__ import annotations
+
 import sys
 from pathlib import Path
 

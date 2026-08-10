@@ -26,6 +26,8 @@
 依赖（scripts/ 下既有模块，全部只读复用）：
     config / capability / retriever / prompt_engine / video_client / vision_client / db
 """
+from __future__ import annotations
+
 import json
 import sys
 from collections import Counter

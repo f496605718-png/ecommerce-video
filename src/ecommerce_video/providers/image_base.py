@@ -20,6 +20,8 @@
 - 能力参数：capabilities 由 __init__.get_image_provider 按 knowledge/models.json 的
   image_models 对应条目注入（注意：image_models 是 dict 非 list，与 models[] 结构不同）。
 """
+from __future__ import annotations
+
 import json
 import time
 from abc import ABC, abstractmethod

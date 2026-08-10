@@ -10,6 +10,8 @@
                  material="缎面", type_name="tvc", provider="seedance-2.0")
     w.check()
 """
+from __future__ import annotations
+
 __version__ = "1.5.0"
 
 from ecommerce_video.workflow import Workflow

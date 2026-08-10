@@ -13,6 +13,8 @@
   - 模型缺失 / 文件缺失 / 字段为空 → 一律降级为保守默认值，绝不抛异常、绝不崩流程；
   - Windows GBK 控制台兼容（stdout/stderr 统一 UTF-8）。
 """
+from __future__ import annotations
+
 import json
 import sys
 from pathlib import Path

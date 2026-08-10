@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """任务数据库：SQLite 管理生成任务（状态机：pending→confirmed→queued→running→done/failed）。"""
+from __future__ import annotations
+
 import json
 import sqlite3
 from pathlib import Path
