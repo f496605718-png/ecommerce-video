@@ -14,7 +14,7 @@
 pip install ecommerce-video
 ```
 
-> 说明：当前以发布包 / editable 安装为准（`pip install -e .` 亦可）。发布到公开 PyPI 后可直接 `pip install ecommerce-video`；在此之前请使用方式二或源码包。
+> 已发布到 PyPI（v1.5.0+）；自动安装依赖 requests / python-dotenv。
 
 ### 方式二：发布包 zip
 

@@ -1,5 +1,7 @@
 # ecommerce-video
 
+![CI](https://github.com/jasonlau1990/ecommerce-video/actions/workflows/ci.yml/badge.svg) ![PyPI version](https://img.shields.io/pypi/v/ecommerce-video) ![Python](https://img.shields.io/pypi/pyversions/ecommerce-video)
+
 **One product image → one ready-to-run ad video.**
 
 ecommerce-video is an AI video production workflow built for e-commerce: a knowledge-base-driven prompt engine + open model integration + batch generation. It is not another "type a description, get a video" toy — it is a **complete pipeline from reference images to finished videos**: recognition, per-shot prompt writing, capability validation, batch generation, QA and delivery. Every stage is designed around real e-commerce client workflows; installable, embeddable, commercially usable.

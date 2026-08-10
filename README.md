@@ -1,5 +1,7 @@
 # ecommerce-video
 
+![CI](https://github.com/jasonlau1990/ecommerce-video/actions/workflows/ci.yml/badge.svg) ![PyPI version](https://img.shields.io/pypi/v/ecommerce-video) ![Python](https://img.shields.io/pypi/pyversions/ecommerce-video)
+
 **一张商品图 → 一条能投流的广告视频。**
 
 ecommerce-video 是面向电商场景的 AI 视频生产工作流：知识库驱动的提示词引擎 + 开放模型接入 + 批量生成。它不是"输入描述出视频"的通用玩具，而是一条**从参考图到成片的完整流水线**——识别、写提示词、能力校验、批量生成、质检交付，每个环节都按真实的电商对客业务设计，可安装、可嵌入、可商用。
