@@ -8,7 +8,7 @@
 #   4. 主测试套件（7 个文件，109 用例，零第三方依赖，unittest）
 #   5. 开放接入集成套件（4 用例，本地 mock server 起在 127.0.0.1，零真实网络；必须与主套件分开跑）
 #   6. 知识库校验 kbcheck（35 个 JSON 逐一 Schema 校验，35/35）
-#   7. 打包 build_package.py → dist/ecommerce-ai-video-workflow-v1.5.0.zip
+#   7. 打包 build_package.py → dist/ecommerce-ai-video-workflow-v<version>.zip（版本号从 pyproject.toml 动态读取）
 #   8. 打包产物纯净安装冒烟：解压 zip → 新建 venv → pip install 解压出的包目录
 #      → import ecommerce_video 打印版本 → ecommerce-video kbcheck 35/35
 #
@@ -71,7 +71,7 @@ jobs:
       - name: 知识库校验（kbcheck 35/35）
         run: ecommerce-video kbcheck
 
-      # 7) 打包：dist/ecommerce-ai-video-workflow-v1.5.0.zip
+      # 7) 打包：dist/ecommerce-ai-video-workflow-v${VERSION}.zip
       #    （标准 src 布局，zip 内顶层 ecommerce-video/，知识库在包内）
       - name: 构建发布包
         run: python build_package.py
@@ -87,12 +87,14 @@ jobs:
           rm -rf "$SMOKE_DIR"
           mkdir -p "$SMOKE_DIR"
           # 用 python -m zipfile 解压（不依赖系统 unzip）
-          python -m zipfile -e "dist/ecommerce-ai-video-workflow-v1.5.0.zip" "$SMOKE_DIR"
+          # 版本号从 pyproject.toml 动态读取（升版后 CI 无需改动）
+          VERSION=$(grep -m1 '^version' pyproject.toml | sed 's/.*= *"\(.*\)".*/\1/')
+          python -m zipfile -e "dist/ecommerce-ai-video-workflow-v${VERSION}.zip" "$SMOKE_DIR"
           # 新建独立虚拟环境（与当前环境完全隔离，验证发布包可纯净安装）
           python -m venv "$SMOKE_DIR/venv"
           # 从解压出的包目录安装（zip 内顶层目录为 ecommerce-video/）
           "$SMOKE_DIR/venv/bin/python" -m pip install "$SMOKE_DIR/ecommerce-video"
-          # 冒烟 1：import 并打印版本（应为 1.5.0）
+          # 冒烟 1：import 并打印版本（应与 pyproject.toml 一致）
           "$SMOKE_DIR/venv/bin/python" -c "import ecommerce_video; print('version:', ecommerce_video.__version__)"
           # 冒烟 2：知识库校验 35/35（包内知识库随包安装，开箱即用）
           "$SMOKE_DIR/venv/bin/ecommerce-video" kbcheck
