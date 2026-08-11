@@ -52,27 +52,18 @@ def _auth_headers(api_key: str):
 
 
 def _request(method: str, url: str, api_key: str, **kw):
-    """带重试的请求；401/403 明确提示密钥问题（防密钥省略）。"""
+    """带重试的请求（P5：统一走 http_utils 指数退避，429 专属重试）；
+    401/403 明确提示密钥问题（防密钥省略）。"""
     if requests is None:
         raise VideoGenError("依赖 requests 未安装：pip install requests")
-    last_err = None
-    for attempt in range(config.API_MAX_RETRIES + 1):
-        try:
-            resp = requests.request(method, url, headers=_auth_headers(api_key),
-                                    timeout=config.API_TIMEOUT, proxies=_proxies(), **kw)
-            if resp.status_code in (401, 403):
-                raise VideoGenError(
-                    f"鉴权失败({resp.status_code})：请检查 .env 中 {config.VIDEO_PROVIDER.upper()}_API_KEY "
-                    f"（当前 {config.mask_key(api_key)}）——见 CONFIG.md")
-            resp.raise_for_status()
-            return resp.json() if resp.content else {}
-        except VideoGenError:
-            raise
-        except Exception as e:
-            last_err = e
-            if attempt < config.API_MAX_RETRIES:
-                time.sleep(config.API_RETRY_INTERVAL)
-    raise VideoGenError(f"请求失败（已重试 {config.API_MAX_RETRIES} 次）: {last_err}")
+    from ecommerce_video.http_utils import request_with_retry
+    resp = request_with_retry(method, url, headers=_auth_headers(api_key), **kw)
+    if resp.status_code in (401, 403):
+        raise VideoGenError(
+            f"鉴权失败({resp.status_code})：请检查 .env 中 {config.VIDEO_PROVIDER.upper()}_API_KEY "
+            f"（当前 {config.mask_key(api_key)}）——见 CONFIG.md")
+    resp.raise_for_status()
+    return resp.json() if resp.content else {}
 
 
 def _api_config(ctx: dict, name: str, default: str = "") -> str:

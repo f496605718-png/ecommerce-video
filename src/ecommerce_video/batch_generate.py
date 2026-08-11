@@ -81,6 +81,13 @@ def cmd_run(w, limit: int = 5):
         logger.info(f"run：完成（成功 {len(r.get('done', []))} 个，失败 {len(r.get('failed', []))} 个）")
 
 
+def cmd_reset(w, project: str):
+    """P6：项目残留任务复位（running/failed → pending），中断/异常后的续传入口。"""
+    n = w.reset(project)
+    logger.info(f"reset：项目 {project} 复位 {n} 条（running/failed → pending）")
+    print(f"项目 {project} 已复位 {n} 条任务为 pending（可重新 run 续传）")
+
+
 def cmd_status(w):
     r = w.stats()
     logger.info(f"status：任务统计 {r['jobs']}，素材库 {r['assets']}")

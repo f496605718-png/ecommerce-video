@@ -37,6 +37,7 @@ if sys.stdout and hasattr(sys.stdout, "reconfigure"):
 
 from ecommerce_video import batch_generate
 from ecommerce_video import prompt_engine
+from ecommerce_video import units
 from ecommerce_video import validate_kb
 from ecommerce_video.workflow import Workflow
 
@@ -82,6 +83,15 @@ def _cmd_run(args):
     batch_generate.cmd_run(_workflow(), args.limit)
 
 
+def _cmd_plan_units(args):
+    units.cmd_plan_units(args.jobs, args.output or args.out or "units.json",
+                         strategy=args.strategy, max_seconds=args.max, llm=not args.no_llm)
+
+
+def _cmd_reset(args):
+    batch_generate.cmd_reset(_workflow(), args.project)
+
+
 def _cmd_gen(args):
     # 兼容旧 `gen sb.json -o out.json` 与文档形态 `gen sb.json out.json`；
     # 缺省输出 jobs.json（与旧版一致）
@@ -113,6 +123,21 @@ def _cmd_gen(args):
         if isinstance(j, dict):
             j.update(meta)
     out_path.write_text(json.dumps(jobs, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # P1：S 合成图自动回填 ref_images（找不到 → 明确提示，绝不静默文生视频）
+    from ecommerce_video.workflow import find_composite
+    comp = find_composite(meta["project"], meta["sku"])
+    if comp:
+        injected = 0
+        for j in jobs:
+            if isinstance(j, dict) and not j.get("ref_images"):
+                j["ref_images"] = [str(comp)]
+                injected += 1
+        out_path.write_text(json.dumps(jobs, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(f"? 已注入合成图参考 ref_images=[{comp}]（{injected} 条）")
+    else:
+        print("? 未找到合成图（assets/{project}/{sku}/composite 或 output/composite），"
+              "jobs 未注入 ref_images —— 将按文生视频生成，请注意")
 
 
 def _cmd_dry(args):
@@ -167,6 +192,21 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=5, metavar="N")
     p.set_defaults(func=_cmd_run)
 
+    p = sub.add_parser("plan-units", help="生成单元规划（开放选项：一镜一提交 / 合并提交+AI切分）")
+    p.add_argument("jobs", metavar="<jobs.json>")
+    p.add_argument("-o", "--output", dest="output", default=None, metavar="units.json")
+    p.add_argument("out", nargs="?", default=None, metavar="[units.json]")
+    p.add_argument("--strategy", default="per-shot", choices=("per-shot", "merge"),
+                   help="提交策略：per-shot=一镜一提交（默认）；merge=≤上限合并、超限AI切分")
+    p.add_argument("--max", type=int, default=None, metavar="SECONDS",
+                   help="单条提交时长上限（默认 UNIT_MAX_SECONDS=10；实际取 min(该值, 模型上限)）")
+    p.add_argument("--no-llm", action="store_true", help="禁用 LLM 判定切分点/融合提示词（贪心+拼接）")
+    p.set_defaults(func=_cmd_plan_units)
+
+    p = sub.add_parser("reset", help="项目残留任务复位（running/failed → pending，续传用）")
+    p.add_argument("project", metavar="<project>")
+    p.set_defaults(func=_cmd_reset)
+
     p = sub.add_parser("gen", help="AI 提示词生成（需 LLM key，prompt_engine）")
     p.add_argument("sb", metavar="<sb.json>")
     p.add_argument("-o", "--output", dest="output", default=None, metavar="jobs.json")
@@ -208,7 +248,12 @@ def main(argv=None):
         # 裸 `ecommerce-video` → 打印帮助（旧版裸调用默认跑 status，统一入口改为帮助更清晰）
         parser.print_help()
         return 0
-    args.func(args)
+    try:
+        args.func(args)
+    except KeyboardInterrupt:
+        # P6：run 中断时 _process_batch 已回滚 pending；这里统一出口码 130
+        print("\n已中断（任务已回滚 pending，可重新 run 续传）")
+        return 130
     return 0
 
 

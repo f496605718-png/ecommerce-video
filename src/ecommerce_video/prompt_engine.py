@@ -49,6 +49,7 @@ if sys.stdout and hasattr(sys.stdout, "reconfigure"):
         pass
 
 from ecommerce_video import config
+from ecommerce_video.workflow import Workflow  # 模块级导入：cmd_gen/cmd_dry/cmd_validate 直接调用时不再 NameError（cli.py 兼容 shim 保留，冗余但无害）
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # src 布局：上上级=src，再上一级=项目根
 KNOWLEDGE = config.KNOWLEDGE_DIR
@@ -286,6 +287,7 @@ def build_prompt(sb: dict) -> str:
 # ---------- LLM 调用（OpenAI 兼容 chat/completions） ----------
 def call_llm(system_prompt: str, user_prompt: str) -> str:
     import requests
+    from ecommerce_video.http_utils import request_with_retry
     headers = {
         "Authorization": f"Bearer {config.TEXT_LLM_API_KEY or config.VISION_API_KEY}",
         "Content-Type": "application/json",
@@ -299,8 +301,7 @@ def call_llm(system_prompt: str, user_prompt: str) -> str:
         "temperature": 0.7,
     }
     url = (config.TEXT_LLM_API_BASE or config.VISION_API_BASE).rstrip("/") + "/chat/completions"
-    proxies = {"http": config.HTTP_PROXY, "https": config.HTTP_PROXY} if config.HTTP_PROXY else None
-    resp = requests.post(url, headers=headers, json=body, timeout=config.API_TIMEOUT, proxies=proxies)
+    resp = request_with_retry("POST", url, headers=headers, json=body)
     if resp.status_code in (401, 403):
         raise RuntimeError("LLM 鉴权失败：请检查 .env 中 TEXT_LLM_API_KEY/VISION_API_KEY")
     resp.raise_for_status()

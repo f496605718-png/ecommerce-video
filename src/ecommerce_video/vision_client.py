@@ -79,9 +79,9 @@ def recognize_image(image_path: str, extra_instructions: str = "") -> dict:
     }
     url = config.VISION_API_BASE.rstrip("/") + "/chat/completions"
     headers = {"Authorization": f"Bearer {config.VISION_API_KEY}", "Content-Type": "application/json"}
-    proxies = {"http": config.HTTP_PROXY, "https": config.HTTP_PROXY} if config.HTTP_PROXY else None
     try:
-        resp = requests.post(url, headers=headers, json=payload, timeout=config.API_TIMEOUT, proxies=proxies)
+        from ecommerce_video.http_utils import request_with_retry
+        resp = request_with_retry("POST", url, headers=headers, json=payload)
         if resp.status_code in (401, 403):
             raise VisionError(f"鉴权失败({resp.status_code})：检查 .env 中 VISION_API_KEY")
         resp.raise_for_status()

@@ -150,6 +150,29 @@ def mark_failed(job_key: str, detail: str):
     conn.close()
 
 
+def mark_pending(job_key: str):
+    """回到 pending（中断续传用：running/failed → pending，可重新 import+confirm 或由 reset 统一处理）。"""
+    conn = connect()
+    conn.execute("UPDATE jobs SET status='pending', updated_at=? WHERE job_key=?",
+                 (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), job_key))
+    conn.commit()
+    conn.close()
+
+
+def reset_project(project: str, statuses: tuple = ("running", "failed")) -> int:
+    """项目级复位：把指定状态的残留任务重置为 pending（SIGKILL/异常中断后的续传入口）。
+    返回受影响行数。"""
+    conn = connect()
+    marks = ",".join("?" for _ in statuses)
+    cur = conn.execute(
+        f"UPDATE jobs SET status='pending', updated_at=? WHERE project=? AND status IN ({marks})",
+        (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), project, *statuses))
+    conn.commit()
+    n = cur.rowcount
+    conn.close()
+    return n
+
+
 def get_jobs(status: str | None = None, project: str | None = None) -> list:
     """取任务列表（可按状态/项目过滤）。"""
     conn = connect()

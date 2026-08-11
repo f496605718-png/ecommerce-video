@@ -54,6 +54,28 @@ logger = get_logger("workflow")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # src 布局：上上级=src，再上一级=项目根
 
 
+def find_composite(project: str, sku: str) -> Path | None:
+    """P1：按 project/sku 查找 S 阶段合成图（图生视频唯一参考图）。
+
+    查找顺序：
+      1. assets/{project}/{sku}/composite/（SOP 规范归档位）
+      2. refs/{project}/{sku}/composite/（素材库位）
+      3. output/composite/（演示/旧版本位，取最新一张）
+    返回最新一张图片；找不到返回 None（调用方应提示，避免静默文生视频）。
+    """
+    candidates: list[Path] = []
+    for base in (PROJECT_ROOT / "assets", PROJECT_ROOT / "refs"):
+        d = base / project / sku / "composite"
+        if d.is_dir():
+            candidates.extend(p for p in d.iterdir() if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp"))
+    out_dir = PROJECT_ROOT / "output" / "composite"
+    if out_dir.is_dir():
+        candidates.extend(p for p in out_dir.iterdir() if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp"))
+    if not candidates:
+        return None
+    return max(candidates, key=lambda p: p.stat().st_mtime)
+
+
 class Workflow:
     """电商 AI 视频全流程 API（识别 → 词源 → 提示词 → 能力校验 → 批量生成）。"""
 
@@ -180,6 +202,14 @@ class Workflow:
         meta = llm_prompt or self.build_meta_prompt(storyboard)
         raw = call_llm("你是严格的 JSON 输出助手，只输出合法 JSON。", meta)
         jobs = parse_json_response(raw)
+        # P2：按分镜时长回填 duration_sec（job 已带则保留；缺失才回填）
+        shot_durations = {
+            s.get("shot_no"): s.get("duration") for s in storyboard.get("shots", [])
+            if isinstance(s, dict) and s.get("duration")
+        }
+        for j in jobs:
+            if isinstance(j, dict) and not j.get("duration_sec") and shot_durations.get(j.get("shot_no")):
+                j["duration_sec"] = int(shot_durations[j.get("shot_no")])
         issues = validate_jobs(jobs, storyboard)
         logger.info(f"提示词生成完成：{len(jobs)} 个任务，{len(issues)} 个校验问题")
         if issues:
@@ -315,9 +345,13 @@ class Workflow:
         return result
 
     def _process_batch(self, batch: list, dry_run: bool = False) -> dict:
-        """串行生成一批任务（内部：video_client 调用 + db 状态更新；dry_run 只打印序列）。"""
+        """串行生成一批任务（内部：video_client 调用 + db 状态更新；dry_run 只打印序列）。
+
+        P6：中断安全——SIGINT/SIGTERM（转 KeyboardInterrupt）时把当前任务与本批剩余
+        任务回滚为 pending（可续传），避免残留 running 卡队列。
+        """
         done, failed, planned = [], [], []
-        for j in batch:
+        for idx, j in enumerate(batch):
             key = j["job_key"]
             if not dry_run:
                 db.mark_running(key)
@@ -375,6 +409,14 @@ class Workflow:
                     db.mark_failed(key, str(e))
                 failed.append({"job_key": key, "error": str(e)})
                 logger.error(f"✘ {key} 失败: {e}")
+            except KeyboardInterrupt:
+                # P6：中断安全退出——当前任务 + 本批剩余任务回滚 pending，可续传
+                if not dry_run:
+                    db.mark_pending(key)
+                    for rest in batch[idx + 1:]:
+                        db.mark_pending(rest["job_key"])
+                logger.warning(f"检测到中断（SIGINT/SIGTERM）：{key} 及本批剩余任务已回滚 pending，可重新 run 续传")
+                raise
             except Exception as e:
                 if not dry_run:
                     db.mark_failed(key, f"{type(e).__name__}: {e}")
@@ -418,6 +460,10 @@ class Workflow:
                 for j in db.get_jobs(status="failed")
             ],
         }
+
+    def reset(self, project: str) -> int:
+        """P6：项目残留任务复位（running/failed → pending），中断/异常后的续传入口。"""
+        return db.reset_project(project)
 
     # ---- CLI 薄壳辅助（init/import/confirm/confirm-all） ----
     def init(self) -> dict:
