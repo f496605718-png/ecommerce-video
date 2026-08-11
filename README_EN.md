@@ -6,7 +6,7 @@
 
 ecommerce-video is an AI video production workflow built for e-commerce: a knowledge-base-driven prompt engine + open model integration + batch generation. It is not another "type a description, get a video" toy — it is a **complete pipeline from reference images to finished videos**: recognition, per-shot prompt writing, capability validation, batch generation, QA and delivery. Every stage is designed around real e-commerce client workflows; installable, embeddable, commercially usable.
 
-> Current version: v1.5.0 (src layout, pip-installable; Python ≥ 3.9)
+> Current version: v1.6.0 (src layout, pip-installable; Python ≥ 3.9)
 
 ## Why this project
 

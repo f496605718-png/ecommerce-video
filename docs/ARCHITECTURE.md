@@ -1,7 +1,7 @@
 # 架构说明（ARCHITECTURE）
 
 > 对应 README 架构一节；本文给出完整版：总体分层、流程骨架 A0→G、检索四级匹配。
-> 版本：v1.5.0（src 布局，包名 ecommerce-video）
+> 版本：v1.6.0（src 布局，包名 ecommerce-video）
 
 ---
 

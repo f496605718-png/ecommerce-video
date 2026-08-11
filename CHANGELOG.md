@@ -3,7 +3,7 @@
 本项目所有值得记录的变更。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)；
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)（pyproject.toml 为唯一真源）。
 
-## [Unreleased] - 2026-08-11
+## [1.6.0] - 2026-08-11
 
 ### Added
 - **生成单元规划器 `plan-units`**（开放选项，用户决定提交策略）：

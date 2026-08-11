@@ -2,7 +2,7 @@
 
 > 给拿到发布包/安装包的人看。按步骤操作即可开始使用。
 > 适用：Windows / macOS / Linux（需 Python 3.9+）
-> 当前版本：v1.5.0（src 布局，`pip install` 可装）
+> 当前版本：v1.6.0（src 布局，`pip install` 可装）
 
 ---
 
@@ -14,14 +14,14 @@
 pip install ecommerce-video
 ```
 
-> 已发布到 PyPI（v1.5.0+）；自动安装依赖 requests / python-dotenv。
+> 已发布到 PyPI（v1.6.0+）；自动安装依赖 requests / python-dotenv。
 
 ### 方式二：发布包 zip
 
 ```bash
 # 1. 解压发布包
-unzip ecommerce-ai-video-workflow-v1.5.0.zip
-cd ecommerce-ai-video-workflow-v1.5.0
+unzip ecommerce-ai-video-workflow-v1.6.0.zip
+cd ecommerce-ai-video-workflow-v1.6.0
 
 # 2. 安装（自动装依赖 requests / python-dotenv）
 pip install .

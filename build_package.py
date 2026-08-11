@@ -30,7 +30,7 @@ zip 内目录结构（标准包布局，顶层目录保留包名 ecommerce-video
   └── data/schema.sql
 
 用法：
-  python build_package.py                # 打包到 dist/ecommerce-ai-video-workflow-v1.5.0.zip
+  python build_package.py                # 打包到 dist/ecommerce-ai-video-workflow-v1.6.0.zip
   python build_package.py --version 1.4.1
 """
 import sys
@@ -38,7 +38,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "1.5.0"              # 与 pyproject.toml 版本号保持同步（--version 可覆盖）
+VERSION = "1.6.0"              # 与 pyproject.toml 版本号保持同步（--version 可覆盖）
 ZIP_ROOT = "ecommerce-video"   # zip 内顶层目录名
 
 # 根级文档/配置白名单（保持 zip 内干净，不含调试残留）
