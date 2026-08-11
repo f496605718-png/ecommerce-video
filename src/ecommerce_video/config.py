@@ -91,9 +91,15 @@ IMAGE_SIZE = get("IMAGE_SIZE", "2K:9:16")  # 生图尺寸：档位:比例（如 
 
 # ---------- 网络 ----------
 HTTP_PROXY = get("HTTP_PROXY") or get("HTTPS_PROXY")
-API_TIMEOUT = int(get("API_TIMEOUT_SECONDS", "120"))
+API_TIMEOUT = int(get("API_TIMEOUT_SECONDS", "300"))  # 默认 300s（原 120s 偏紧，LLM 长响应易超时）
 API_MAX_RETRIES = int(get("API_MAX_RETRIES", "1"))
 API_RETRY_INTERVAL = int(get("API_RETRY_INTERVAL_SECONDS", "5"))
+API_429_MAX_RETRIES = int(get("API_429_MAX_RETRIES", "3"))  # 429 限流专属退避重试次数
+
+# ---------- 生成单元规划（开放选项，用户决定提交策略） ----------
+# 单条视频提交时长上限（秒）：≤ 该值的多镜提示词可合并为一条提交；超限切分。
+# 实际生效值 = min(本配置, 模型 duration_max)，见 units.py。
+UNIT_MAX_SECONDS = int(get("UNIT_MAX_SECONDS", "10"))
 
 # ---------- 路径 ----------
 # 知识库定位优先级：1) 环境变量 KNOWLEDGE_DIR（最高） 2) 包内随 package-data 打进的 knowledge/
