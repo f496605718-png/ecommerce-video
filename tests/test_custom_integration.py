@@ -48,14 +48,15 @@ def _pick_free_port() -> int:
 
 
 # =====================================================================
-# 模块级准备：必须在导入 ecommerce_video 之前设置环境变量
-# （config.py 在 import 时读取环境变量；os.environ 优先于 .env，不污染真实 .env）
+# 准备（P11 修复：环境隔离）——mock 环境变量不再在模块导入时写入 os.environ
+# （此前模块级 os.environ.update 会污染同进程后续测试模块，导致全量 discover 变红）；
+# 改为在 CustomOpenAccessTest.setUpClass 注入 + reload config，_cleanup 恢复。
 # =====================================================================
 _MOCK_PORT = _pick_free_port()
 _TMP_ROOT = Path(tempfile.mkdtemp(prefix="ecom_mock_"))
 _MOCK_BASE = f"http://127.0.0.1:{_MOCK_PORT}/v1"
 
-os.environ.update({
+_MOCK_ENV = {
     # 视频：custom（OpenAI 兼容）→ 配置键为 CUSTOM_API_KEY / CUSTOM_API_BASE / CUSTOM_MODEL
     "VIDEO_PROVIDER": "custom",
     "CUSTOM_API_KEY": "mock-test-key",
@@ -80,7 +81,7 @@ os.environ.update({
     "API_TIMEOUT_SECONDS": "30",
     "API_MAX_RETRIES": "0",
     "API_RETRY_INTERVAL_SECONDS": "1",
-})
+}
 
 # 再导入项目代码（此时 config 已读到上面的 mock 配置）
 from tests.mock_api_server import MockApiServer  # noqa: E402
@@ -110,6 +111,11 @@ class CustomOpenAccessTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # 0) 注入 mock 环境并 reload config（原模块级 update 的副作用收敛到本类）
+        import importlib
+        cls._orig_env = dict(os.environ)
+        os.environ.update(_MOCK_ENV)
+        importlib.reload(config)
         # 1) 启动本地 mock 服务（线程，端口 = 模块级预选端口）
         cls.server = MockApiServer(port=_MOCK_PORT).start()
         # 2) 数据库重定向到临时文件（不污染项目 data/video_jobs.db）
@@ -140,6 +146,14 @@ class CustomOpenAccessTest(unittest.TestCase):
             cls._cap_patch.stop()
         except Exception:
             pass
+        # P11：恢复环境并 reload config（不影响同进程其他测试模块）
+        try:
+            os.environ.clear()
+            os.environ.update(getattr(cls, "_orig_env", {}))
+        except Exception:
+            pass
+        import importlib
+        importlib.reload(config)
         db.DB_PATH, db.SCHEMA = cls._db_orig
         try:
             cls.server.stop()
